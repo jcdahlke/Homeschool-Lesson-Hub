@@ -1,109 +1,59 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Homeschool-Lesson-Hub
+A website and Database to facilitate a forum where people can post interactive or intuitive lesson ideas to help people learn in different ways
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+1. Problem Statement
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+Homeschool educators and parents often spend a significant amount of time sifting through fragmented sources (blogs, forums, and social media) to find high-quality, interactive, and intuitive lesson ideas. There is no centralized, well-organized, and easily searchable platform dedicated specifically to these hands-on activities, forcing educators to reinvent the wheel or settle for static worksheets. Even college students have issues understanding ideas intuitively.
 
-## Features
+2. Proposed Solution
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+I propose to build a web-based application, the "Homeschool Lesson Hub," to solve this problem. The Hub will be a community-driven repository where users can submit their own creative lesson ideas and discover ideas from others.
 
-## Demo
+The application's core feature will be a robust search and filtering system, allowing users to find the exact lesson they need by:
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+* Genre (e.g., Science, Math, History)
+* Specific Topic (e.g., Biology, Fractions, Ancient Rome)
+* Age Range (e.g., 5-7, 8-10)
+* Lesson Type (Interactive, Analogy, Video, etc.)
+* Materials Needed (e.g., "common household items")
+* Prep Time
 
-## Deploy to Vercel
+3. Core Database Implementation (Project Scope)
 
-Vercel deployment will guide you through creating a Supabase account and project.
+This project is fundamentally a database-driven application. I will be using PostgreSQL to demonstrate a variety of key database concepts.
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+* Database System: PostgreSQL (hosted on Supabase)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+* Schema Design: The core of the project will be designing a normalized, relational schema. This will include tables such as:
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+  * lessons (lesson_id, title, description, instructions, age_range, etc.)
+  * lesson_type (lesson_type_id, lesson_type_name)
+  * users (user_id, username)
+  * genres (genre_id, genre_name)
+  * topics (topic_id, topic_name, genre_id)
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+* Relational Logic (JOINS): The schema will effectively use relationships to link data.
 
-## Clone and run locally
+  * One-to-Many: A user can post many lessons. A genre can have many topics.
+  * Many-to-Many: A single lesson may cover multiple topics. This will be implemented using a lesson_topics_junction table, a classic database design pattern.
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+* CRUD Operations: The application's functionality will map directly to all CRUD operations:
 
-2. Create a Next.js app using the Supabase Starter template npx command
+  * Create: INSERT new records when a user submits a lesson.
+  * Read: Use complex SELECT queries with multiple JOINs to power the search and filter page.
+  * Update: Allow users to UPDATE their submitted lessons.
+  * Delete: Allow users to DELETE their submissions.
 
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
+4. Advanced Feature (Stretch Goal)
 
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+To add an advanced search feature, I plan to implement semantic (vector) search using the pgvector extension for PostgreSQL.
 
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+* Problem: A user might search for "baking math," but a standard keyword search would miss a great lesson titled "Using a Pizza to Learn Ratios."
+* Solution: By using pgvector, I will store vector embeddings of each lesson's description. This will allow the search engine to find lessons based on conceptual meaning and semantic similarity, not just keyword matching. This demonstrates a modern, powerful use of PostgreSQL beyond simple relational data.
 
-3. Use `cd` to change into the app's directory
+5. Proposed Technology Stack
 
-   ```bash
-   cd with-supabase-app
-   ```
-
-4. Rename `.env.example` to `.env.local` and update the following:
-
-  ```env
-  NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=[INSERT SUPABASE PROJECT API PUBLISHABLE OR ANON KEY]
-  ```
-  > [!NOTE]
-  > This example uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, which refers to Supabase's new **publishable** key format.
-  > Both legacy **anon** keys and new **publishable** keys can be used with this variable name during the transition period. Supabase's dashboard may show `NEXT_PUBLIC_SUPABASE_ANON_KEY`; its value can be used in this example.
-  > See the [full announcement](https://github.com/orgs/supabase/discussions/29260) for more information.
-
-  Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
-
-5. You can now run the Next.js local development server:
-
-   ```bash
-   npm run dev
-   ```
-
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
-
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
-
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
-
-## Feedback and issues
-
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
-
-## More Supabase examples
-
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+* Database: PostgreSQL (via Supabase)
+* Web Framework: Next.js (React)
+* Database Client: supabase-js
+* Vector Search: pgvector
