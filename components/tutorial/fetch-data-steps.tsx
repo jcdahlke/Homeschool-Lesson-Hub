@@ -1,3 +1,38 @@
+/**
+ * @description
+ * A React component that renders a tutorial guide on how to
+ * create tables, enable RLS, and query data from Supabase
+ * within a Next.js application.
+ *
+ * @remarks
+ * This component structures a multi-step tutorial as an
+ * ordered list (`<ol>`).
+ *
+ * 1.  **Composition:** It uses two child components:
+ * - `<TutorialStep>`: To render each numbered step with
+ * a title and descriptive content.
+ * - `<CodeBlock>`: To display formatted SQL and
+ * JavaScript/TypeScript code snippets.
+ * 2.  **Predefined Snippets:** It defines several constants
+ * (`create`, `rls`, `server`, `client`) containing
+ * the code examples that are passed as props to
+ * the `<CodeBlock>` components.
+ * 3.  **Content:** It guides the user through:
+ * - Creating a `notes` table and inserting data.
+ * - Enabling Row Level Security (RLS) with a policy.
+ * - Querying data from both a Server Component
+ * (`/app/notes/page.tsx`) and a Client Component.
+ * - Exploring the Supabase UI library.
+ *
+ * @example
+ * // Used on a home or documentation page.
+ * <FetchDataSteps />
+ *
+ * @dependencies
+ * - `./tutorial-step`: A child component for a single step.
+ * - `./code-block`: A child component for displaying code.
+ */
+
 import { TutorialStep } from "./tutorial-step";
 import { CodeBlock } from "./code-block";
 

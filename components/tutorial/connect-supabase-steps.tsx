@@ -1,3 +1,32 @@
+/**
+ * @description
+ * A React component that renders a list of tutorial steps
+ * for connecting a Next.js application to Supabase.
+ *
+ * @remarks
+ * This component structures a tutorial as an ordered list (`<ol>`).
+ *
+ * 1.  **Composition:** It uses a child component, `<TutorialStep>`,
+ * to render each individual step in the list.
+ * 2.  **Content:** It provides instructions for:
+ * - Creating a Supabase project.
+ * - Setting up local environment variables (`.env.local`).
+ * - Restarting the Next.js development server.
+ * - Refreshing the page.
+ * 3.  **Styling:**
+ * - Includes external links with appropriate styling.
+ * - Uses inline-block elements (`<span>`) styled to look
+ * like code snippets for file and command names.
+ *
+ * @example
+ * // Used on a home or setup page to guide developers.
+ * <ConnectSupabaseSteps />
+ *
+ * @dependencies
+ * - `./tutorial-step`: A child component used to render
+ * each numbered step with a title and content.
+ */
+
 import { TutorialStep } from "./tutorial-step";
 
 export function ConnectSupabaseSteps() {

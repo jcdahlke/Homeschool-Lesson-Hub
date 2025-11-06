@@ -1,3 +1,46 @@
+/**
+ * @description
+ * A React Client Component (`"use client"`) that provides a dropdown
+ * menu for switching the application's theme (light, dark, or system).
+ *
+ * @remarks
+ * This component is designed to work with `next-themes`.
+ *
+ * 1.  **Client Component:** Uses `"use client"` to leverage React
+ * hooks like `useState`, `useEffect`, and the `useTheme` hook.
+ * 2.  **Hydration Mismatch Prevention:**
+ * - It uses a `mounted` state, initialized to `false`.
+ * - A `useEffect` hook sets `mounted` to `true` only on the
+ * client side, after the component has mounted.
+ * - It returns `null` if `!mounted`. This is a crucial step
+ * to prevent a hydration mismatch error, as the `theme`
+ * from `useTheme` might be different on the server (default)
+ * versus the client (from localStorage).
+ * 3.  **Hooks:**
+ * - `useTheme`: From `next-themes`, this hook provides the
+ * current `theme` and the `setTheme` function.
+ * 4.  **UI Components:**
+ * - It uses `DropdownMenu` components from `@/components/ui`
+ * (likely shadcn/ui) to build the switcher.
+ * - The `DropdownMenuTrigger` is a `Button` that displays
+ * an icon (`Sun`, `Moon`, or `Laptop` from `lucide-react`)
+ * corresponding to the currently active theme.
+ * - The `DropdownMenuContent` contains a `DropdownMenuRadioGroup`
+ * bound to the `theme` value, allowing the user to select
+ * a new theme.
+ *
+ * @example
+ * // Placed in the site header or footer.
+ * <ThemeSwitcher />
+ *
+ * @dependencies
+ * - `react (useState, useEffect)`: For client-side state and effects.
+ * - `next-themes (useTheme)`: For theme context and control.
+ * - `lucide-react`: For icons (Sun, Moon, Laptop).
+ * - `@/components/ui/*`: shadcn/ui components for the
+ * dropdown menu and button.
+ */
+
 "use client";
 
 import { Button } from "@/components/ui/button";

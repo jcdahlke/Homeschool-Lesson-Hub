@@ -1,3 +1,38 @@
+/**
+ * @description
+ * A React Client Component (`"use client"`) that renders a
+ * formatted block of code with a "copy to clipboard" button.
+ *
+ * @remarks
+ * 1.  **Client Component:** Uses `"use client"` to leverage the
+ * `useState` hook for managing the button's icon.
+ * 2.  **Local Icons:** Defines `CopyIcon` and `CheckIcon` as
+ * self-contained inline SVG components.
+ * 3.  **State Management:**
+ * - `Icon`: Holds the current icon *component* to display
+ * (`CopyIcon` or `CheckIcon`).
+ * 4.  **Copy Functionality (`copy`):**
+ * - Implements a "copy to clipboard" function.
+ * - **NOTE:** Uses `document.execCommand('copy')` via a
+ * temporary `<textarea>` element. This method is used
+ * for compatibility within iFramed environments, where the
+ * modern `navigator.clipboard` API is often restricted.
+ * - On successful copy, it provides visual feedback by
+ * swapping the icon to `CheckIcon` for 2 seconds,
+ * then reverting to `CopyIcon`.
+ * 5.  **Layout:**
+ * - Renders a `<pre>` tag for the code block.
+ * - The `Button` is positioned absolutely in the top-right
+ * corner of the `<pre>` block.
+ *
+ * @example
+ * <CodeBlock code={`const hello = "world";`} />
+ *
+ * @dependencies
+ * - `react (useState)`: For state management.
+ * - `../ui/button`: Custom Button component.
+ */
+
 "use client";
 
 import { useState } from "react";

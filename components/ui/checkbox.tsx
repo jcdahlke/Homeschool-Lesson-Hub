@@ -1,3 +1,47 @@
+/**
+ * @description
+ * A React Client Component (`"use client"`) that renders a styled,
+ * accessible checkbox.
+ *
+ * @remarks
+ * This component is built as a wrapper around the
+ * `@radix-ui/react-checkbox` primitive components, providing
+ * custom styling via Tailwind CSS.
+ *
+ * 1.  **Client Component:** Uses `"use client"` to leverage React
+ * hooks and event handlers.
+ * 2.  **Radix UI Primitive:**
+ * - It uses `CheckboxPrimitive.Root` as the main clickable
+ * checkbox element.
+ * - It uses `CheckboxPrimitive.Indicator` to control the
+ * visibility of the checkmark.
+ * 3.  **Ref Forwarding:** Uses `React.forwardRef` to pass a `ref`
+ * prop down to the `CheckboxPrimitive.Root` element,
+ * allowing parent components to interact with it.
+ * 4.  **Styling:**
+ * - Uses the `cn` utility to merge base styles with custom
+ * `className` props.
+ * - Styles the `Root` element's `data-[state=checked]`
+ * attribute to change its appearance when checked
+ * (e.g., `bg-primary`).
+ * 5.  **Icon:**
+ * - Uses the `Check` icon from `lucide-react` inside the
+ * `Indicator` to show the checked state.
+ *
+ * @example
+ * <div className="flex items-center space-x-2">
+ * <Checkbox id="terms" />
+ * <label htmlFor="terms">Accept terms and conditions</label>
+ * </div>
+ *
+ * @dependencies
+ * - `react (forwardRef)`: For component definition and ref forwarding.
+ * - `@radix-ui/react-checkbox`: For the core accessible
+ * checkbox functionality.
+ * - `lucide-react`: For the `Check` icon.
+ * - `@/lib/utils (cn)`: Utility for merging Tailwind classes.
+ */
+
 "use client";
 
 import * as React from "react";

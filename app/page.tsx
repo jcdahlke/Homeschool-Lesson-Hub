@@ -1,3 +1,49 @@
+/**
+ * @description
+ * The main homepage component for the application, rendered for the `/` route.
+ *
+ * @remarks
+ * This component serves as the central layout for the landing page,
+ * composing several other components to build the UI.
+ *
+ * 1.  **Structure:** It renders a full-page layout consisting of:
+ * - A `<nav>` bar at the top.
+ * - A main content area (`<div className="flex-1">`).
+ * - A `<footer>` at the bottom.
+ *
+ * 2.  **Conditional Logic (`hasEnvVars`):**
+ * - This component relies on a utility function `hasEnvVars()` to
+ * check if the necessary Supabase environment variables are set.
+ * - **In the nav:** If `!hasEnvVars`, it renders the
+ * `<EnvVarWarning />` component. Otherwise, it renders the
+ * `<AuthButton />`.
+ * - **In the main content:** If `!hasEnvVars`, it renders the
+ * `<ConnectSupabaseSteps />` tutorial. Otherwise, it
+ * renders the `<SignUpUserSteps />` tutorial.
+ *
+ * 3.  **Composed Components:**
+ * - `<DeployButton />`: In the nav, provides a link to deploy.
+ * - `<AuthButton />`: In the nav, shows login/logout status.
+ * - `<Hero />`: The main headline/logo section.
+ * - `<ConnectSupabaseSteps />`: Tutorial for setting up env vars.
+ * - `<SignUpUserSteps />`: Tutorial for signing up a user.
+ * - `<ThemeSwitcher />`: In the footer, allows theme changes.
+ *
+ * @example
+ * // This component is automatically rendered by Next.js for
+ * // the `/` route (e.g., in `app/page.tsx`).
+ *
+ * @dependencies
+ * - `next/link`: For the "Next.js Supabase Starter" home link.
+ * - `@/components/deploy-button`: Renders Vercel deploy button.
+ * - `@/components/env-var-warning`: Renders warning for missing env vars.
+ * - `@/components/auth-button`: Renders login/logout buttons.
+ * - `@/components/hero`: Renders the page's hero section.
+ * - `@/components/theme-switcher`: Renders the theme toggle.
+ * - `@/components/tutorial/*`: Imports tutorial step components.
+ * - `@/lib/utils (hasEnvVars)`: Utility to check for env vars.
+ */
+
 import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";

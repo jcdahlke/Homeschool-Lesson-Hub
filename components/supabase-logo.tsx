@@ -1,3 +1,32 @@
+/**
+ * @description
+ * A React component that renders the Supabase logo and logotype
+ * as an inline SVG.
+ *
+ * @remarks
+ * This component is purely visual and contains the path data
+ * for the Supabase brand.
+ *
+ * 1.  **SVG:** It renders a standards-based `<svg>` element.
+ * 2.  **Styling:**
+ * - The logotype (the text "supabase") uses `fill="currentColor"`,
+ * allowing its color to be controlled by the parent's
+ * CSS `color` property.
+ * - The logo mark (the "S") uses predefined gradients
+ * (`paint0_linear_4671_51136` and `paint1_linear_4671_51136`)
+ * and a hardcoded fill (`#3ECF8E`) for its specific branding.
+ * 3.  **Accessibility:** It includes an `aria-label` to
+ * ensure it is properly identified by screen readers.
+ *
+ * @example
+ * // Used in other components, like <Hero />, to display
+ * // the brand logo.
+ * <SupabaseLogo />
+ *
+ * @dependencies
+ * - None. This is a self-contained SVG component.
+ */
+
 export function SupabaseLogo() {
   return (
     <svg

@@ -1,3 +1,58 @@
+/**
+ * @description
+ * A comprehensive set of React Client Components (`"use client"`) for
+ * building accessible, styled dropdown menus.
+ *
+ * @remarks
+ * This file is a classic example of a "compound component" system,
+ * built as a styled wrapper around the `@radix-ui/react-dropdown-menu`
+ * primitive components.
+ *
+ * 1.  **Client Component:** Uses `"use client"` to leverage React
+ * hooks and event handlers.
+ * 2.  **Radix UI Primitives:** This component set is almost entirely
+ * composed of styled exports from `@radix-ui/react-dropdown-menu`.
+ * - It re-exports primitives like `Root`, `Trigger`, `Group`,
+ * `Portal`, `Sub`, and `RadioGroup` directly.
+ * 3.  **Compound Components:** It provides styled versions of all
+ * the necessary parts of a dropdown, which are intended to
+ * be nested together:
+ * - `DropdownMenu`: The root component.
+ * - `DropdownMenuTrigger`: The element that opens/closes the menu.
+ * - `DropdownMenuContent`: The floating panel that holds the items.
+ * - `DropdownMenuItem`: A standard clickable item.
+ * - `DropdownMenuCheckboxItem`: An item that can be checked.
+ * - `DropdownMenuRadioItem`: An item for a radio group.
+ * - `DropdownMenuLabel`: A non-interactive heading.
+ * - `DropdownMenuSeparator`: A visual divider.
+ * - `DropdownMenuSub*`: Components for nested sub-menus.
+ * 4.  **Ref Forwarding:** All relevant components (e.g., `Content`,
+ * `Item`, `SubTrigger`) use `React.forwardRef` to pass refs
+ * down to the underlying Radix DOM elements.
+ * 5.  **Styling:**
+ * - Uses the `cn` utility to merge base styles with custom
+ * `className` props.
+ * - Uses `data-` attributes for styling states (e.g.,
+ * `data-[state=open]`, `data-[disabled]`).
+ * - Includes animations for opening/closing (`animate-in`,
+ * `animate-out`).
+ * 6.  **Icons:**
+ * - Uses `lucide-react` icons (`Check`, `ChevronRight`, `Circle`)
+ * for visual indicators.
+ *
+ * @example
+ * // See `theme-switcher.tsx` for a practical example of
+ * // `DropdownMenu`, `Trigger`, `Content`, `RadioGroup`,
+ * // and `RadioItem`.
+ *
+ * @dependencies
+ * - `react (forwardRef)`: For component definition and ref forwarding.
+ * - `@radix-ui/react-dropdown-menu`: For the core accessible
+ * dropdown functionality.
+ * - `lucide-react`: For icons.
+ * - `@/lib/utils (cn)`: Utility for merging Tailwind classes.
+ */
+
 "use client";
 
 import * as React from "react";

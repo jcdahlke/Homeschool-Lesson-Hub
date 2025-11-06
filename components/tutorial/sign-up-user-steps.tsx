@@ -1,3 +1,37 @@
+/**
+ * @description
+ * A React component (likely a Server Component) that renders a
+ * tutorial guide for signing up the first user.
+ *
+ * @remarks
+ * This component provides a dynamic, context-aware step for
+ * developers deploying on Vercel.
+ *
+ * 1.  **Conditional Rendering (Vercel):**
+ * - It checks `process.env.VERCEL_ENV` to see if the app is
+ * running in a Vercel "preview" or "production" environment.
+ * - If it is, it renders a special `<TutorialStep>` that
+ * dynamically displays the relevant Vercel environment
+ * variables (`VERCEL_URL`, `VERCEL_PROJECT_PRODUCTION_URL`).
+ * - This step instructs the developer to update their Supabase
+ * project's redirect URLs to match their Vercel deployment,
+ * which is a crucial step for Vercel-based auth to work.
+ *
+ * 2.  **Standard Step:**
+ * - It always renders a final `<TutorialStep>` that encourages
+ * the developer to visit the app's `/auth/sign-up` page
+ * to create the first user account.
+ *
+ * @example
+ * // Used on a home or documentation page.
+ * <SignUpUserSteps />
+ *
+ * @dependencies
+ * - `next/link`: For navigation to auth pages and external docs.
+ * - `./tutorial-step`: A child component for a single step.
+ * - `lucide-react`: For the `ArrowUpRight` icon.
+ */
+
 import Link from "next/link";
 import { TutorialStep } from "./tutorial-step";
 import { ArrowUpRight } from "lucide-react";

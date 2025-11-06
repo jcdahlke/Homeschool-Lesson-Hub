@@ -1,3 +1,50 @@
+/**
+ * @description
+ * A React component that renders a styled "badge" element.
+ *
+ * @remarks
+ * This component is a core part of a UI library (likely shadcn/ui)
+ * and uses `class-variance-authority` (CVA) for styling.
+ *
+ * 1.  **CVA (class-variance-authority):**
+ * - It defines `badgeVariants` using `cva` to manage a base set
+ * of styles (layout, rounding, font) and several visual
+ * variants (`default`, `secondary`, `destructive`, `outline`).
+ * - Each variant applies different `border`, `bg` (background),
+ * `text`, and `hover` utility classes.
+ * 2.  **`cn` Utility:**
+ * - The `Badge` component itself uses the `cn` utility to
+ * merge the classes from `badgeVariants` with any custom
+ * `className` prop provided by the parent component.
+ * 3.  **Props (`BadgeProps`):**
+ * - The component's props interface extends standard
+ * `React.HTMLAttributes<HTMLDivElement>` and the
+ * `VariantProps<typeof badgeVariants>`. This allows it
+ * to accept all standard `div` props (like `onClick`, `id`)
+ * as well as the `variant` prop.
+ * 4.  **Exports:**
+ * - It exports both the `Badge` component (for use in JSX)
+ * and the `badgeVariants` object. Exporting `badgeVariants`
+ * is a common pattern, allowing other components to
+ * reuse the badge's styles if needed (e.g., applying
+ * badge styles to a button).
+ *
+ * @example
+ * // Default badge
+ * <Badge>Default</Badge>
+ *
+ * // Destructive badge
+ * <Badge variant="destructive">Destructive</Badge>
+ *
+ * // Outline badge with custom class
+ * <Badge variant="outline" className="mt-2">Outline</Badge>
+ *
+ * @dependencies
+ * - `react`: For component definition.
+ * - `class-variance-authority`: For creating style variants.
+ * - `@/lib/utils (cn)`: Utility for merging Tailwind classes.
+ */
+
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 

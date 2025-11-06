@@ -1,3 +1,52 @@
+/**
+ * @description
+ * A React Client Component (`"use client"`) that renders a complete
+ * sign-up form for new users.
+ *
+ * @remarks
+ * This component manages all the necessary state for a user
+ * registration flow.
+ *
+ * 1.  **Client Component:** Uses `"use client"` to leverage React hooks
+ * like `useState` and `useRouter`.
+ * 2.  **State Management:** Manages local state for:
+ * - `email`: The user's email input.
+ * - `password`: The user's password input.
+ * - `repeatPassword`: The password confirmation input.
+ * - `error`: Any error message (e.g., from validation or Supabase).
+ * - `isLoading`: A boolean to disable the form during submission.
+ * 3.  **Hooks:**
+ * - `useRouter`: From `next/navigation`, used to programmatically
+ * redirect the user after a successful sign-up.
+ * 4.  **Form Submission (`handleSignUp`):**
+ * - Performs local validation to check if `password` and
+ * `repeatPassword` match.
+ * - Initializes the *client-side* Supabase client.
+ * - Calls `supabase.auth.signUp` with the email and password.
+ * - Includes an `emailRedirectTo` option, specifying that the
+ * confirmation link in the email should send the user to
+ * `/protected` after they confirm.
+ * - On success (i.e., the sign-up request was sent), it redirects
+ * the user to `/auth/sign-up-success` (likely a page that
+ * says "Check your email").
+ * - On failure, it catches the error and displays it to the user.
+ * 5.  **Navigation Links:**
+ * - Includes a `Link` to `/auth/login` for users who
+ * already have an account.
+ *
+ * @example
+ * // Placed on the /auth/sign-up page.
+ * <SignUpForm />
+ *
+ * @dependencies
+ * - `react (useState)`: For managing component-level state.
+ * - `next/navigation (useRouter)`: For programmatic navigation.
+ * - `next/link`: For declarative navigation links.
+ * - `@/lib/supabase/client`: The client-side Supabase client factory.
+ * - `@/lib/utils (cn)`: Utility for merging Tailwind classes.
+ * - `@/components/ui/*`: UI components (Card, Button, Input, Label).
+ */
+
 "use client";
 
 import { cn } from "@/lib/utils";

@@ -1,3 +1,46 @@
+/**
+ * @description
+ * A React Client Component (`"use client"`) that renders a form for
+ * users to request a password reset email.
+ *
+ * @remarks
+ * This component handles all the state and logic for the
+ * password reset flow.
+ *
+ * 1.  **Client Component:** Uses the `"use client"` directive, enabling
+ * the use of React hooks like `useState`.
+ * 2.  **State Management:** Manages four local states:
+ * - `email`: The email address entered by the user.
+ * - `error`: Any error message returned from Supabase.
+ * - `success`: A boolean flag to toggle the UI to a success message.
+ * - `isLoading`: A boolean flag to disable the form during submission.
+ * 3.  **Form Submission (`handleForgotPassword`):**
+ * - On submit, it initializes the *client-side* Supabase client.
+ * - It calls `supabase.auth.resetPasswordForEmail`, passing the
+ * user's email.
+ * - It dynamically generates a `redirectTo` URL using
+ * `window.location.origin`, pointing the user to the
+ * `/auth/update-password` page on the current site.
+ * (Note: This URL must be whitelisted in the Supabase dashboard).
+ * 4.  **Conditional UI:**
+ * - If `success` is `true`, it renders a "Check Your Email" message.
+ * - Otherwise, it renders the password reset form.
+ * 5.  **Error Handling:** Displays any caught errors below the email input.
+ * 6.  **Navigation:** Includes a `Link` to the login page for users
+ * who don't need to reset their password.
+ *
+ * @example
+ * // Placed on a /forgot-password page.
+ * <ForgotPasswordForm />
+ *
+ * @dependencies
+ * - `react (useState)`: For managing component-level state.
+ * - `next/link`: For navigation to the login page.
+ * - `@/lib/supabase/client`: The client-side Supabase client factory.
+ * - `@/lib/utils (cn)`: Utility for merging Tailwind classes.
+ * - `@/components/ui/*`: UI components (Card, Button, Input, Label).
+ */
+
 "use client";
 
 import { cn } from "@/lib/utils";

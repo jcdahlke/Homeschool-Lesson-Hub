@@ -1,3 +1,28 @@
+/**
+ * @description
+ * A React component that renders a "Deploy to Vercel" button.
+ *
+ * @remarks
+ * This component provides a one-click deployment link for Vercel.
+ *
+ * 1.  It uses the Next.js `Link` component to create a hyperlink.
+ * 2.  The `href` attribute contains a specially crafted URL for
+ * `vercel.com/new/clone`. This URL includes query parameters
+ * that pre-configure the Vercel deployment wizard with
+ * the source repository, project name, and other demo details.
+ * 3.  The link is styled as a Button component (`./ui/button`).
+ * 4.  It includes an inline SVG that renders the Vercel logo (a triangle).
+ * 5.  `target="_blank"` ensures the link opens in a new browser tab.
+ *
+ * @example
+ * // Used in a component (e.g., a footer or admin page)
+ * <DeployButton />
+ *
+ * @dependencies
+ * - `next/link`: For client-side navigation.
+ * - `./ui/button`: A custom Button component (likely from shadcn/ui).
+ */
+
 import Link from "next/link";
 import { Button } from "./ui/button";
 

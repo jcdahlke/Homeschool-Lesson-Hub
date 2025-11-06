@@ -1,3 +1,33 @@
+/**
+ * @description
+ * A React component that renders the main "hero" section of the page.
+ *
+ * @remarks
+ * This component is primarily for display and branding, showing
+ * the Next.js and Supabase logos and a marketing headline.
+ *
+ * 1.  **Logo Display:** It renders the `<SupabaseLogo />` and
+ * `<NextLogo />` components, wrapped in external links
+ * (`<a>` tags) to their respective websites.
+ * 2.  **Headline:** It displays a large headline promoting the
+ * template as a fast way to build with Supabase and Next.js.
+ * The product names in the headline are also links.
+ * 3.  **Styling:** It uses Tailwind CSS for layout (flexbox, gap)
+ * and typography.
+ * 4.  **Accessibility:** It includes a screen-reader-only `<h1>`
+ * (`sr-only`) to provide a top-level heading for the page.
+ * 5.  **Visual Divider:** It renders a full-width gradient line
+ * as a decorative separator.
+ *
+ * @example
+ * // Used on the main landing page.
+ * <Hero />
+ *
+ * @dependencies
+ * - `./next-logo`: A component that renders the Next.js logo.
+ * - `./supabase-logo`: A component that renders the Supabase logo.
+ */
+
 import { NextLogo } from "./next-logo";
 import { SupabaseLogo } from "./supabase-logo";
 

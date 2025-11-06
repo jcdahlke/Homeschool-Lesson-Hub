@@ -1,3 +1,43 @@
+/**
+ * @description
+ * A React Client Component (`"use client"`) that renders a complete
+ * login form for email and password authentication.
+ *
+ * @remarks
+ * This component manages all the necessary state for a user login flow.
+ *
+ * 1.  **Client Component:** Uses `"use client"` to leverage React hooks
+ * like `useState` and `useRouter`.
+ * 2.  **State Management:** Manages local state for:
+ * - `email`: The user's email input.
+ * - `password`: The user's password input.
+ * - `error`: Any error message from Supabase.
+ * - `isLoading`: A boolean to disable the form during submission.
+ * 3.  **Hooks:**
+ * - `useRouter`: From `next/navigation`, used to programmatically
+ * redirect the user after a successful login.
+ * 4.  **Form Submission (`handleLogin`):**
+ * - Initializes the *client-side* Supabase client.
+ * - Calls `supabase.auth.signInWithPassword` with the email and password.
+ * - On success, it redirects the user to the `/protected` route.
+ * - On failure, it catches the error and displays it to the user.
+ * 5.  **Navigation Links:**
+ * - Includes a `Link` to `/auth/forgot-password`.
+ * - Includes a `Link` to `/auth/sign-up` for new users.
+ *
+ * @example
+ * // Placed on the /auth/login page.
+ * <LoginForm />
+ *
+ * @dependencies
+ * - `react (useState)`: For managing component-level state.
+ * - `next/navigation (useRouter)`: For programmatic navigation.
+ * - `next/link`: For declarative navigation links.
+ * - `@/lib/supabase/client`: The client-side Supabase client factory.
+ * - `@/lib/utils (cn)`: Utility for merging Tailwind classes.
+ * - `@/components/ui/*`: UI components (Card, Button, Input, Label).
+ */
+
 "use client";
 
 import { cn } from "@/lib/utils";

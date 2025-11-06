@@ -1,3 +1,55 @@
+/**
+ * @description
+ * This is the main configuration file for Tailwind CSS.
+ *
+ * @remarks
+ * This file configures Tailwind's behavior, including theme settings,
+ * content scanning, plugins, and dark mode strategy. This specific
+ * configuration is typical of a project using shadcn/ui.
+ *
+ * 1.  **`darkMode: ["class"]`**:
+ * - Configures dark mode to be activated by a `.dark` class
+ * on a parent element (usually the `<html>` tag).
+ * - This is managed by `next-themes` (as seen in `layout.tsx`).
+ *
+ * 2.  **`content`**:
+ * - An array of "glob" patterns.
+ * - Tailwind CSS scans these files at build time to find
+ * all the utility classes being used.
+ * - It then "tree-shakes" the CSS, generating a final stylesheet
+ * containing *only* the classes found, which keeps the
+ * file size minimal.
+ *
+ * 3.  **`theme.extend.colors`**:
+ * - Extends Tailwind's default color palette.
+ * - **Key Feature:** All colors are defined as CSS variables
+ * (e.g., `hsl(var(--background))`).
+ * - This is the core of shadcn/ui's theming system. These
+ * variables (like `--background`, `--primary`, etc.) are
+ * defined in a global CSS file (like `globals.css`),
+ * and different values are provided for light and dark themes.
+ *
+ * 4.  **`theme.extend.borderRadius`**:
+ * - Extends border-radius utilities.
+ * - It also uses a CSS variable (`--radius`) for consistent
+ * rounding, which can be easily changed in `globals.css`.
+ *
+ * 5.  **`plugins`**:
+ * - `require("tailwindcss-animate")`: Adds a plugin that
+ * provides utilities for CSS animations (e.g., fade-in,
+ * slide-in). This is used by many shadcn/ui components
+ * like `DropdownMenu` for their open/close animations.
+ *
+ * 6.  **`satisfies Config`**:
+ * - This is a TypeScript feature, not part of JavaScript.
+ * - It "satisfies" the `Config` type from `tailwindcss`,
+ * which provides type-checking and auto-completion
+ * for the configuration object within a TypeScript
+ * environment (even though this is a `.js` file).
+ *
+ * @type {import('tailwindcss').Config}
+ */
+
 import type { Config } from "tailwindcss";
 
 export default {

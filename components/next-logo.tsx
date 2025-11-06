@@ -1,3 +1,30 @@
+/**
+ * @description
+ * A React component that renders the Next.js logotype as an
+ * inline SVG.
+ *
+ * @remarks
+ * This component is purely visual and contains the path data
+ * for the "NEXT.JS" logo.
+ *
+ * 1.  **SVG:** It renders a standards-based `<svg>` element.
+ * 2.  **Styling:** The `fill="currentColor"` property on the
+ * `<path>` elements allows the logo's color to be controlled
+ * by the parent's CSS `color` property (e.g., Tailwind's
+ * `text-black` or `text-white`).
+ * 3.  **Accessibility:** It includes an `aria-label` and
+ * `role="img"` to ensure it is properly identified by
+ * screen readers.
+ *
+ * @example
+ * // Used in other components, like <Hero />, to display
+ * // the brand logo.
+ * <NextLogo />
+ *
+ * @dependencies
+ * - None. This is a self-contained SVG component.
+ */
+
 export function NextLogo() {
   return (
     <svg
