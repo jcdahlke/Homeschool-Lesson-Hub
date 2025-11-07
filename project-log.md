@@ -16,7 +16,7 @@ Total: 9 Hours
 
 | Date  | Description   | Hours |
 | -     |  -            |-      |
-| 11/07/2025 | Discussed project, made low-fi UI design  | 1.0 
+| 11/07/2025 | Discussed project design, made low-fi UI design  | 1.0 
 <!-- | Date | Description | | -->
 
 Total: `1` Hours
