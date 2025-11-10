@@ -1,24 +1,32 @@
 # Homeschool-Lesson-Hub
-A website and Database to facilitate a forum where people can post interactive or intuitive lesson ideas to help people learn in different ways
 
-1. Problem Statement
+A public forum where people can post homeschool lesson ideas to help faciliate learning in different methods.
+
+## 1. Problem Statement
 
 Homeschool educators and parents often spend a significant amount of time sifting through fragmented sources (blogs, forums, and social media) to find high-quality, interactive, and intuitive lesson ideas. There is no centralized, well-organized, and easily searchable platform dedicated specifically to these hands-on activities, forcing educators to reinvent the wheel or settle for static worksheets. Even college students have issues understanding ideas intuitively.
 
-2. Proposed Solution
+## 2. Proposed Solution
 
 I propose to build a web-based application, the "Homeschool Lesson Hub," to solve this problem. The Hub will be a community-driven repository where users can submit their own creative lesson ideas and discover ideas from others.
 
 The application's core feature will be a robust search and filtering system, allowing users to find the exact lesson they need by:
 
-* Genre (e.g., Science, Math, History)
+* Subject (e.g., Science, Math, History)
 * Specific Topic (e.g., Biology, Fractions, Ancient Rome)
 * Age Range (e.g., 5-7, 8-10)
 * Lesson Type (Interactive, Analogy, Video, etc.)
 * Materials Needed (e.g., "common household items")
 * Prep Time
 
-3. Core Database Implementation (Project Scope)
+### 2.5. Core Features
+
+* Post and share homeschool lessons with clear metadata.
+* Browse, search, and filter lessons by subject, age, type, and materials.
+* Upvote or comment on useful lessons (community engagement feature).
+* Save favorite lessons for later.
+
+## 3. Core Database Implementation (Project Scope)
 
 This project is fundamentally a database-driven application. I will be using PostgreSQL to demonstrate a variety of key database concepts.
 
@@ -44,14 +52,14 @@ This project is fundamentally a database-driven application. I will be using Pos
   * Update: Allow users to UPDATE their submitted lessons.
   * Delete: Allow users to DELETE their submissions.
 
-4. Advanced Feature (Stretch Goal)
+## 4. Advanced Feature (Stretch Goal)
 
 To add an advanced search feature, I plan to implement semantic (vector) search using the pgvector extension for PostgreSQL.
 
 * Problem: A user might search for "baking math," but a standard keyword search would miss a great lesson titled "Using a Pizza to Learn Ratios."
 * Solution: By using pgvector, I will store vector embeddings of each lesson's description. This will allow the search engine to find lessons based on conceptual meaning and semantic similarity, not just keyword matching. This demonstrates a modern, powerful use of PostgreSQL beyond simple relational data.
 
-5. Proposed Technology Stack
+## 5. Proposed Technology Stack
 
 * Database: PostgreSQL (via Supabase)
 * Web Framework: Next.js (React)

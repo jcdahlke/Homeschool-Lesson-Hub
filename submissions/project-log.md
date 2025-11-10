@@ -16,7 +16,8 @@ Total: 10 Hours
 
 | Date  | Description   | Hours |
 | ----- | ------------- | ----- |
-| 11/07/2025 | Discussed project design, made low-fi UI design  | 1.0 
+| 11/07/2025 | Discussed project structure, made low-fi UI design  | 1.0 
+| 11/10/2025 | Analyzed React code, studied Vercel, Designed Figma prototype | 1.0 |
 <!-- | Date | Description | | -->
 
 Total: `1` Hours
