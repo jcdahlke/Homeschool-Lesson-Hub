@@ -43,4 +43,5 @@ next-env.d.ts
 node_modules
 
 # bethany note files
-design-notes.md
+/ref/design-notes.md
+

@@ -16,9 +16,11 @@ Total: 10 Hours
 
 | Date  | Description   | Hours |
 | ----- | ------------- | ----- |
-| 11/07/2025 | Discussed project structure, made low-fi UI design  | 1.0 
-| 11/10/2025 | Organized code, Analyzed React code, studied Vercel, Began Figma prototype design | 1.0 |
+| 11/07/2025 | Meeting with Joey: Discussed project structure, Made low-fi UI design  | 1.0 
+| 11/10/2025 | Organized code, Analyzed React code, Studied Vercel, Began Figma prototype design | 1.0 |
 | 11/11/2025 | Study React code, Continue Figma design | 3.0 |
+| 11/13/2025 | Continue Figma design | 2.5 |
+| 11/13/2025 | Meeting with Joey: Discussed UI design and database structure | 1.0 |
 <!-- | Date | Description | | -->
 
-Total: `2` Hours
+Total: `8.5` Hours
