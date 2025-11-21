@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    --brand-green: 129 25% 50%;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -31,6 +32,7 @@
     --radius: 0.5rem;
   }
   .dark {
+    --brand-green: 129 25% 25%;
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;

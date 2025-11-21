@@ -22,7 +22,6 @@
  * renders the `<SignUpUserSteps />` tutorial.
  *
  * 3.  **Composed Components:**
- * - `<DeployButton />`: In the nav, provides a link to deploy.
  * - `<AuthButton />`: In the nav, shows login/logout status.
  * - `<Hero />`: The main headline/logo section.
  * - `<ConnectSupabaseSteps />`: Tutorial for setting up env vars.
@@ -35,7 +34,6 @@
  *
  * @dependencies
  * - `next/link`: For the "Next.js Supabase Starter" home link.
- * - `@/components/deploy-button`: Renders Vercel deploy button.
  * - `@/components/env-var-warning`: Renders warning for missing env vars.
  * - `@/components/auth-button`: Renders login/logout buttons.
  * - `@/components/hero`: Renders the page's hero section.
@@ -44,7 +42,6 @@
  * - `@/lib/utils (hasEnvVars)`: Utility to check for env vars.
  */
 
-import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { Hero } from "@/components/hero";
@@ -61,10 +58,7 @@ export default function Home() {
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
             <div className="flex gap-5 items-center font-semibold">
-              <Link href={"/"}>Next.js Supabase Starter</Link>
-              <div className="flex items-center gap-2">
-                <DeployButton />
-              </div>
+              <Link href={"/"}>Homeschool Lesson Hub</Link>
             </div>
             {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
           </div>

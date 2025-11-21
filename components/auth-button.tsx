@@ -34,15 +34,34 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { LogoutButton } from "./logout-button";
+import { UserPlus } from "lucide-react";
 
 export async function AuthButton() {
   const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
 
-  // You can also use getUser() which will be slower.
-  const { data } = await supabase.auth.getClaims();
+  const user = data?.user;
 
-  const user = data?.claims;
+  // NOT LOGGED IN
+  if (!user) {
+    return (
+      <div className="flex items-center gap-3">
+        {/* Log in */}
+        <Button asChild size="sm" variant="secondary" className="px-8">
+          <Link href="/auth/login">Log in</Link>
+        </Button>
 
+        {/* Sign up */}
+        <Button asChild size="sm" className="px-8 bg-brandGreen hover:bg-brandGreen/90">
+          <Link href="/auth/sign-up" className="flex items-center gap-2">
+            <UserPlus className="h-4 w-4" />
+            Sign up
+          </Link>
+        </Button>
+      </div>
+      
+    );
+  }
   return user ? (
     <div className="flex items-center gap-4">
       Hey, {user.email}!

@@ -18,7 +18,6 @@
  *
  * 3.  **Composed Components:** The nav and footer are composed of
  * several other shared components:
- * - `<DeployButton />`: In the nav, for Vercel deployment.
  * - `<AuthButton />`: In the nav, to show user status and
  * the logout button.
  * - `<EnvVarWarning />`: A fallback in the nav if env vars
@@ -39,19 +38,17 @@
  *
  * @dependencies
  * - `next/link`: For the home link.
- * - `@/components/deploy-button`: Renders Vercel deploy button.
  * - `@/components/env-var-warning`: Renders warning for missing env vars.
  * - `@/components/auth-button`: Renders login/logout buttons.
  * - `@/components/theme-switcher`: Renders the theme toggle.
  * - `@/lib/utils (hasEnvVars)`: Utility to check for env vars.
  */
 
-import { DeployButton } from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/lib/utils";
-import Link from "next/link";
+import { Logo } from "@/components/logo";
 
 export default function ProtectedLayout({
   children,
@@ -63,12 +60,7 @@ export default function ProtectedLayout({
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-            <div className="flex gap-5 items-center font-semibold">
-              <Link href={"/"}>Next.js Supabase Starter</Link>
-              <div className="flex items-center gap-2">
-                <DeployButton />
-              </div>
-            </div>
+            < Logo />
             {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
           </div>
         </nav>
