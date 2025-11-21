@@ -42,6 +42,5 @@ yarn-error.log*
 next-env.d.ts
 node_modules
 
-# bethany note files
-/ref/design-notes.md
-
+# local vscode settings
+.vscode/*
