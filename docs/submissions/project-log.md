@@ -23,7 +23,8 @@ Total: `14.5` Hours
 | 11/11/2025 | Study React code, Continue Figma design | 3.0 |
 | 11/13/2025 | Continue Figma design | 2.5 |
 | 11/13/2025 | Meeting with Joey: Discussed UI design and database structure | 1.0 |
-| 11/20/2025 | Studied vercel code, Started writing  React code for front end | 1.0 |
+| 11/20/2025 | Studied vercel code, Started writing React code for front end | 1.0 |
+| 11/21/2025 | Developing React code for front end | 2.0 |
 <!-- | Date | Description | | -->
 
-Total: `8.5` Hours
+Total: `11.5` Hours

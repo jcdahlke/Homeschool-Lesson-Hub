@@ -2,7 +2,7 @@
 For summary and overview of project see the README
 
 ## ERD Diagram
-![My ERD Diagram](erd-diagram.png)
+![My ERD Diagram](new-erd-diagram.png)
 
 Data will come from user input
 
