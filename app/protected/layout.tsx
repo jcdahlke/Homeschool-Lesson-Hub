@@ -48,7 +48,7 @@ import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/lib/utils";
-import { Logo } from "@/components/logo";
+import { Logo } from "@/components/site-logo";
 
 export default function ProtectedLayout({
   children,

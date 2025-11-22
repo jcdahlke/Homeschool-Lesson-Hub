@@ -7,6 +7,9 @@
  * This component operates on the server side ("use server" context is implied
  * by its async nature and server-side Supabase client).
  *
+ * // TODO: Update description to match code
+ *
+ *
  * 1.  It initializes the Supabase server client.
  * 2.  It fetches the user's authentication data (specifically `getClaims()`,
  * which is often faster than `getUser()` as it might read from a JWT).
@@ -33,8 +36,8 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { createClient } from "@/lib/supabase/server";
+import { Plus, UserPlus } from "lucide-react";
 import { LogoutButton } from "./logout-button";
-import { UserPlus } from "lucide-react";
 
 export async function AuthButton() {
   const supabase = await createClient();
@@ -52,29 +55,50 @@ export async function AuthButton() {
         </Button>
 
         {/* Sign up */}
-        <Button asChild size="sm" className="px-8 bg-brandGreen hover:bg-brandGreen/90">
+        <Button
+          asChild
+          size="sm"
+          className="px-8 bg-brandGreen hover:bg-brandGreen/90"
+        >
           <Link href="/auth/sign-up" className="flex items-center gap-2">
             <UserPlus className="h-4 w-4" />
             Sign up
           </Link>
         </Button>
       </div>
-      
     );
   }
-  return user ? (
-    <div className="flex items-center gap-4">
-      Hey, {user.email}!
+
+  // ELSE, LOGGED IN
+
+  /** TODO: update this to get profilePicture from database */
+  const profilePicture = "/default-profile-picture.png";
+
+  return (
+    <div className="flex items-center gap-6">
+      {/* Create Lesson  */}
+      <Button
+        asChild
+        size="sm"
+        className="px-8 bg-brandGreen hover:bg-brandGreen/90 flex items-center gap-2"
+      >
+        <Link href="/lessons/new">
+          <Plus className="h-4 w-4" />
+          Create a Lesson
+        </Link>
+      </Button>
+
+      {/* Profile Button */}
+      <Link href="/profile">
+        <img
+          src={profilePicture || "/default-profile-picture.png"}
+          className="h-12 w-12 rounded-full object-cover border"
+        />
+      </Link>
+
+      {/* Logout Button */}
+      {/* TODO: remove when profile page is implemented */}
       <LogoutButton />
-    </div>
-  ) : (
-    <div className="flex gap-2">
-      <Button asChild size="sm" variant={"outline"}>
-        <Link href="/auth/login">Sign in</Link>
-      </Button>
-      <Button asChild size="sm" variant={"default"}>
-        <Link href="/auth/sign-up">Sign up</Link>
-      </Button>
     </div>
   );
 }
