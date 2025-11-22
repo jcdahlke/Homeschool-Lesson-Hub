@@ -25,8 +25,9 @@
  * - `./ui/button`: A custom Button component (likely from shadcn/ui).
  */
 
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+
 
 export function EnvVarWarning() {
   return (

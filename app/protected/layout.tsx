@@ -44,11 +44,11 @@
  * - `@/lib/utils (hasEnvVars)`: Utility to check for env vars.
  */
 
-import { EnvVarWarning } from "@/components/env-var-warning";
-import { AuthButton } from "@/components/auth-button";
-import { ThemeSwitcher } from "@/components/theme-switcher";
+import { AuthButton } from "@/components/auth/auth-button";
+import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { hasEnvVars } from "@/lib/utils";
-import { Logo } from "@/components/site-logo";
+import { Logo } from "@/components/branding/logo";
+import { EnvVarWarning } from "@/components/shared/env-var-warning";
 
 export default function ProtectedLayout({
   children,

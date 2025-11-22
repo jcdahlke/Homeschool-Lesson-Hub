@@ -1,4 +1,4 @@
-import { ThemeSwitcher } from "./theme-switcher";
+import { ThemeSwitcher } from "../shared/theme-switcher";
 
 export function Footer() {
   return (

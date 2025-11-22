@@ -14,9 +14,9 @@
  * - `@/components/layout/SideMenu`: For displaying the side navigation menu.
  */
 
-import { AdMenu } from "@/components/layout/AdMenu";
-import { LessonFeed } from "@/components/layout/LessonFeed";
-import { SideMenu } from "@/components/layout/SideMenu";
+import { AdMenu } from "@/components/layout/ad-menu";
+import { LessonFeed } from "@/components/layout/lesson-feed";
+import { SideMenu } from "@/components/layout/side-menu";
 
 export default function HomePage() {
   return (
