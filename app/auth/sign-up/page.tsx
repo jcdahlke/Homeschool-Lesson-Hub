@@ -41,7 +41,7 @@ export default function SignUpPage() {
           </h1>
           <p className="mt-3 text-sm text-muted-foreground md:text-base">
             Get more features and privileges by joining the most helpful
-            community.
+            home-centered community.
           </p>
 
           <div className="mt-8">
@@ -53,7 +53,7 @@ export default function SignUpPage() {
       {/* Right side: hero image */}
       <section className="relative hidden lg:block flex-1">
         <Image
-          src="/images/register.jpg" 
+          src="/images/register.jpg"
           alt="Girl making paper rainbows"
           fill
           className="object-cover"
