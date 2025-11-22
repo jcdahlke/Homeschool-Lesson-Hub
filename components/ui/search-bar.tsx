@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
-import { FormEvent } from "react";
+import { FormEvent, useEffect } from "react";
 
 type Props = {
   className?: string;
@@ -13,6 +13,14 @@ export function SearchBar({ className }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams?.has("q")) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("q");
+      router.replace(`${pathname}?${params.toString()}`);
+    }
+  }, [pathname, router, searchParams]);
 
   // Hide on login / signup pages
   const hiddenRoutes = ["/auth/login", "/auth/sign-up"];
