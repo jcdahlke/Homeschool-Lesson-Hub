@@ -27,14 +27,40 @@
  * component being rendered.
  */
 
+
+import Image from "next/image";
 import { LoginForm } from "@/components/login-form";
 
-export default function Page() {
+export default function LoginPage() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <LoginForm />
-      </div>
+    <div className="flex min-h-screen w-full bg-[#f4f4f4]">
+      {/* Left side */}
+      <section className="flex flex-1 items-center justify-center px-6 py-10 md:px-16">
+        <div className="w-full max-w-md">
+          <h1 className="text-2xl font-semibold md:text-3xl">
+            We’ve Missed You!
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground md:text-base">
+            More than 150* lessons are waiting for your next homeschool adventure!
+          </p>
+          <p className="text-xs text-muted-foreground pt-1">*exaggerated number for dramatic effect</p>
+
+          <div className="mt-8">
+            <LoginForm />
+          </div>
+        </div>
+      </section>
+
+      {/* Right side image */}
+      <section className="relative hidden lg:block flex-1">
+        <Image
+          src="/images/login-hero.jpg"
+          alt="Homeschool girl with laptop doing math"
+          fill
+          className="object-cover"
+          priority
+        />
+      </section>
     </div>
   );
 }

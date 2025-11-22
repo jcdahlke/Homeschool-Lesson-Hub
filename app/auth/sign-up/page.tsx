@@ -27,14 +27,39 @@
  * component being rendered.
  */
 
+import Image from "next/image";
 import { SignUpForm } from "@/components/sign-up-form";
 
-export default function Page() {
+export default function SignUpPage() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <SignUpForm />
-      </div>
+    <div className="flex min-h-screen w-full bg-[#f4f4f4]">
+      {/* Left side: copy + form */}
+      <section className="flex flex-1 items-center justify-center px-6 py-10 md:px-16">
+        <div className="w-full max-w-md">
+          <h1 className="text-2xl font-semibold md:text-3xl">
+            Homeschool Lesson Hub
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground md:text-base">
+            Get more features and privileges by joining the most helpful
+            community.
+          </p>
+
+          <div className="mt-8">
+            <SignUpForm />
+          </div>
+        </div>
+      </section>
+
+      {/* Right side: hero image */}
+      <section className="relative hidden lg:block flex-1">
+        <Image
+          src="/images/register.jpg" 
+          alt="Girl making paper rainbows"
+          fill
+          className="object-cover"
+          priority
+        />
+      </section>
     </div>
   );
 }

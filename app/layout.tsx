@@ -52,6 +52,7 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Header } from "@/components/site-header";
+import { Footer } from "@/components/site-footer";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -83,7 +84,11 @@ export default function RootLayout({
         >
           <main className="min-h-screen flex flex-col">
             <Header />
+            
             <div className="flex-1">{children}</div>{" "}
+
+            <Footer />
+
           </main>
         </ThemeProvider>
       </body>

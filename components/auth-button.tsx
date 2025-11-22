@@ -58,12 +58,12 @@ export async function AuthButton() {
         <Button
           asChild
           size="sm"
-          className="px-8 bg-brandGreen hover:bg-brandGreen/90"
+          className="px-8 bg-brandGreen hover:bg-brandGreenDark"
         >
           <Link href="/auth/sign-up" className="flex items-center gap-2">
             <UserPlus className="h-4 w-4" />
             Sign up
-          </Link>
+          </Link> 
         </Button>
       </div>
     );
@@ -80,7 +80,7 @@ export async function AuthButton() {
       <Button
         asChild
         size="sm"
-        className="px-8 bg-brandGreen hover:bg-brandGreen/90 flex items-center gap-2"
+        className="px-8 bg-brandGreen hover:bg-brandGreenDark flex items-center gap-2"
       >
         <Link href="/lessons/new">
           <Plus className="h-4 w-4" />

@@ -25,6 +25,7 @@ Total: `14.5` Hours
 | 11/13/2025 | Meeting with Joey: Discussed UI design and database structure | 1.0 |
 | 11/20/2025 | Studied vercel code, Started writing React code for front end | 1.0 |
 | 11/21/2025 | Developing React code for front end | 4.0 |
+<!-- 7:30 -->
 <!-- | Date | Description | | -->
 
-Total: `11.5` Hours
+Total: `13.5` Hours

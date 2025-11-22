@@ -69,6 +69,7 @@ export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -82,6 +83,12 @@ export function SignUpForm({
     setIsLoading(true);
     setError(null);
 
+    if (!username.trim()) {
+      setError("Please enter a username");
+      setIsLoading(false);
+      return;
+    }
+
     if (password !== repeatPassword) {
       setError("Passwords do not match");
       setIsLoading(false);
@@ -94,6 +101,9 @@ export function SignUpForm({
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/protected`,
+          // TODO: This adds username to user_metadata, but we will need to
+          // add new user to app_user table as well
+          data: { username },
         },
       });
       if (error) throw error;
@@ -109,13 +119,20 @@ export function SignUpForm({
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Sign up</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
-        </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp}>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 pt-8">
+              <div className="grid gap-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="username"
+                  required
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -152,7 +169,11 @@ export function SignUpForm({
                 />
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button
+                type="submit"
+                className="w-full bg-brandGreen hover:bg-brandGreenDark text-white"
+                disabled={isLoading}
+              >
                 {isLoading ? "Creating an account..." : "Sign up"}
               </Button>
             </div>
