@@ -72,22 +72,14 @@ type Props = {
   className?: string;
 };
 
-// 1. We move the logic into a non-exported "Content" component
 function SearchBarContent({ className }: Props) {
+  // --- 1. ALWAYS CALL HOOKS FIRST ---
+  // These must run on *every* render, no matter what page you are on.
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Hide on login / signup pages
-  // We check this early to avoid running effects if not needed
-  const hiddenRoutes = ["/auth/login", "/auth/sign-up"];
-  if (pathname && hiddenRoutes.includes(pathname)) {
-    return null;
-  }
-
-  // NOTE: This effect clears the 'q' param immediately on load. 
-  // Ensure this is intended behavior, as it might clear your search results 
-  // as soon as they appear.
+  // --- 2. RUN EFFECTS SECOND ---
   useEffect(() => {
     if (searchParams?.has("q")) {
       const params = new URLSearchParams(searchParams.toString());
@@ -108,6 +100,14 @@ function SearchBarContent({ className }: Props) {
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  // --- 3. CONDITIONAL RETURNS LAST ---
+  // Only AFTER all hooks have run do we decide if we should hide the component.
+  const hiddenRoutes = ["/auth/login", "/auth/sign-up"];
+  if (pathname && hiddenRoutes.includes(pathname)) {
+    return null;
+  }
+
+  // --- 4. RENDER UI ---
   return (
     <form
       onSubmit={handleSubmit}
@@ -124,17 +124,5 @@ function SearchBarContent({ className }: Props) {
         placeholder="Search..."
       />
     </form>
-  );
-}
-
-// 2. We export this wrapper component
-export function SearchBar(props: Props) {
-  return (
-    // The Suspense boundary tells Next.js: "If the search params aren't ready
-    // (like during static generation of the 404 page), just render the fallback 
-    // instead of crashing."
-    <Suspense fallback={<div className="w-full max-w-xl h-10" />}>
-      <SearchBarContent {...props} />
-    </Suspense>
   );
 }
