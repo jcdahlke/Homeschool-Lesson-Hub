@@ -72,15 +72,17 @@ type Props = {
   className?: string;
 };
 
+// 1. INNER LOGIC (Not exported)
+// This handles the inputs and params.
 function SearchBarContent({ className }: Props) {
-  // --- 1. ALWAYS CALL HOOKS FIRST ---
-  // These must run on *every* render, no matter what page you are on.
+  // HOOKS FIRST (Always run these)
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // --- 2. RUN EFFECTS SECOND ---
+  // EFFECTS SECOND
   useEffect(() => {
+    // Clears the search param from URL after loading
     if (searchParams?.has("q")) {
       const params = new URLSearchParams(searchParams.toString());
       params.delete("q");
@@ -100,14 +102,14 @@ function SearchBarContent({ className }: Props) {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  // --- 3. CONDITIONAL RETURNS LAST ---
-  // Only AFTER all hooks have run do we decide if we should hide the component.
+  // CONDITIONAL RETURNS LAST
+  // Only return null after all hooks have run
   const hiddenRoutes = ["/auth/login", "/auth/sign-up"];
   if (pathname && hiddenRoutes.includes(pathname)) {
     return null;
   }
 
-  // --- 4. RENDER UI ---
+  // RENDER UI
   return (
     <form
       onSubmit={handleSubmit}
@@ -124,5 +126,15 @@ function SearchBarContent({ className }: Props) {
         placeholder="Search..."
       />
     </form>
+  );
+}
+
+// 2. EXPORTED COMPONENT (Wrapper)
+// This is what Header.tsx imports. It wraps the logic in Suspense.
+export function SearchBar(props: Props) {
+  return (
+    <Suspense fallback={<div className="w-full max-w-xl h-10" />}>
+      <SearchBarContent {...props} />
+    </Suspense>
   );
 }
