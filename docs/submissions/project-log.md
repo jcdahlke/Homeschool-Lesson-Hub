@@ -11,8 +11,9 @@
 11/07/2025 | Met with Bethany Graves and went over initial structure together | 1 Hour |
 11/13/2025 | Meeting with Bethany discussing project design, more research into supabase vector search | 1.5 Hour |
 11/14/2025 | Updated ERD, updated tables in Supabase, Started backend for vector search, Added vector search func in Supabase, Added indexing to embeddings, added API Keys to Vercel env. variables | 3 Hours |
+11/25/2025 | Changed Genre to Subject, Studied sign-up connection methods to app_user table, implemented API version but then changed to Supabase trigger option on creation of Supabase auth user | 5 Hours
 
-Total: `14.5` Hours
+Total: `19.5` Hours
 
 ## Bethany Edwards
 
