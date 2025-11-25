@@ -76,13 +76,18 @@ export function SignUpForm({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
+  /**
+   * Handles full sign-up flow:
+   * 1. Creates Supabase Auth user
+   * 2. Calls API route to create row in app_user table
+   */
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
+    // form validation
     if (!username.trim()) {
       setError("Please enter a username");
       setIsLoading(false);
@@ -96,6 +101,7 @@ export function SignUpForm({
     }
 
     try {
+      // 1. Create Supabase Auth user
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -107,6 +113,15 @@ export function SignUpForm({
         },
       });
       if (error) throw error;
+
+      // 2. Ask backend to create app_user row
+      await fetch("/api/create-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username }),
+      });
+
+      // Redirect user to "Check your email" page
       router.push("/auth/sign-up-success");
       router.refresh();
     } catch (error: unknown) {
