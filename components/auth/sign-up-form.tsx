@@ -114,12 +114,6 @@ export function SignUpForm({
       });
       if (error) throw error;
 
-      // 2. Ask backend to create app_user row
-      await fetch("/api/create-user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username }),
-      });
 
       // Redirect user to "Check your email" page
       router.push("/auth/sign-up-success");
