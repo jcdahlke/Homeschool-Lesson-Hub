@@ -29,4 +29,4 @@ Total: `19.5` Hours
 | 12/03/2025 | Meeting with Joey: Planned project presentation and next steps | 1 |
 <!-- | Date | Description | | -->
 
-Total: `17` Hours
+Total: `18` Hours
