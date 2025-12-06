@@ -27,6 +27,7 @@ Total: `19.5` Hours
 | 11/20/2025 | Studied vercel code, Started writing React code for front end | 1.0 |
 | 11/21/2025 | Developing React code for front end | 7.5 |
 | 12/03/2025 | Meeting with Joey: Planned project presentation and next steps | 1.0 |
+| 12/04/2025 | Figma Design User profile page | 2.0 |
 <!-- | Date | Description | | -->
 
-Total: `18` Hours
+Total: `20` Hours
