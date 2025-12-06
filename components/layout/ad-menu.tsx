@@ -11,9 +11,9 @@ export function AdMenu() {
             <span>Un-Paid Promotion</span>
           </CardTitle>
         </CardHeader>
+
         <CardContent className="space-y-3">
           <div className="aspect-[16/9] overflow-hidden rounded-md bg-muted">
-            {/* Replace with a real image if you want */}
             <Image
               src="/images/cs452-ad.jpg"
               alt="CS452 Advertisement"
@@ -32,9 +32,14 @@ export function AdMenu() {
               your data-modeling brain. Relational. Deductive. Object-oriented.
               All in one course.
             </p>
-            <button className="mt-1 text-xs font-medium text-brandGreen hover:underline">
+            <a
+              href="https://catalog.byu.edu/courses/08102-002"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-1 text-xs font-medium text-brandGreen hover:underline"
+            >
               Enrollment open now!
-            </button>
+            </a>
           </div>
         </CardContent>
       </Card>
@@ -44,11 +49,12 @@ export function AdMenu() {
         <CardHeader className="pb-2">
           <CardTitle className="text-sm">Featured Links</CardTitle>
         </CardHeader>
+
         <CardContent className="space-y-1 text-sm">
           <ul className="list-disc space-y-1 pl-4 text-brandGreen">
             <li>
               <a
-                href="https://github.com/"
+                href="https://github.com/jcdahlke/Homeschool-Lesson-Hub"
                 target="_blank"
                 rel="noreferrer"
                 className="hover:underline"
@@ -58,7 +64,7 @@ export function AdMenu() {
             </li>
             <li>
               <a
-                href="#"
+                href="https://byu.instructure.com/courses/32608/pages/final-project"
                 className="hover:underline"
                 target="_blank"
                 rel="noreferrer"

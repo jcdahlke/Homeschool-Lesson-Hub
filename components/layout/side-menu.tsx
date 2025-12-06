@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 
 export function SideMenu() {
     return (
-        <aside className="hidden w-56 shrink-0 lg:block">
+        <aside className="hidden w-64 shrink-0 lg:block">
           <Card className="h-full">
             <CardHeader className="border-b py-3">
               <CardTitle className="text-xs font-semibold tracking-widest text-muted-foreground">
