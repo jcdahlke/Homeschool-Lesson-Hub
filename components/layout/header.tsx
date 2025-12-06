@@ -13,16 +13,12 @@ export function Header() {
   return (
     <nav className="w-full border-b">
       <div className="mx-auto flex h-16 items-center gap-6 lg:container lg:px-16 xl:px-20">
-        
-        {/* Left: Logo */}
         <Logo />
 
-        {/* Center: Search bar expands */}
         <div className="flex-1 flex justify-center">
           <SearchBar className="w-full max-w-xl" />
         </div>
 
-        {/* Right: Auth */}
         {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
       </div>
     </nav>

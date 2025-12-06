@@ -15,8 +15,7 @@
  * which is often faster than `getUser()` as it might read from a JWT).
  * 3.  **Conditional Rendering:**
  * - If a user is found (i.e., `user` is truthy), it displays a
- * personalized welcome message with the user's email and renders
- * the client-side `<LogoutButton />` component.
+ * personalized welcome message with the user's email.
  * - If no user is found (logged out), it displays "Sign in" and "Sign up"
  * links.
  *
@@ -29,7 +28,6 @@
  * - `./ui/button`: A custom Button component (likely from shadcn/ui).
  * - Uses the `asChild` prop to pass button styling to the `Link` child.
  * - `@/lib/supabase/server`: The server-side Supabase client factory.
- * - `./logout-button`: A separate component to handle the logout action
  * (likely a client component with an onClick handler).
  */
 
@@ -37,7 +35,6 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { Plus, UserPlus } from "lucide-react";
-import { LogoutButton } from "./logout-button";
 
 export async function AuthButton() {
   const supabase = await createClient();
@@ -50,20 +47,20 @@ export async function AuthButton() {
     return (
       <div className="flex items-center gap-3">
         {/* Log in */}
-        <Button asChild size="sm" variant="secondary" className="px-8">
+        <Button asChild size="md" variant="secondary" className="px-8">
           <Link href="/auth/login">Log in</Link>
         </Button>
 
         {/* Sign up */}
         <Button
           asChild
-          size="sm"
+          size="md"
           className="px-8 bg-brandGreen hover:bg-brandGreenDark"
         >
           <Link href="/auth/sign-up" className="flex items-center gap-2">
             <UserPlus className="h-4 w-4" />
             Sign up
-          </Link> 
+          </Link>
         </Button>
       </div>
     );
@@ -79,7 +76,7 @@ export async function AuthButton() {
       {/* Create Lesson  */}
       <Button
         asChild
-        size="sm"
+        size="md"
         className="px-8 bg-brandGreen hover:bg-brandGreenDark flex items-center gap-2"
       >
         <Link href="/lessons/new">
@@ -95,10 +92,6 @@ export async function AuthButton() {
           className="h-12 w-12 rounded-full object-cover border"
         />
       </Link>
-
-      {/* Logout Button */}
-      {/* TODO: remove when profile page is implemented */}
-      <LogoutButton />
     </div>
   );
 }
