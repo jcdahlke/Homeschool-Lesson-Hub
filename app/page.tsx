@@ -1,13 +1,13 @@
 /**
  * app/page.tsx
- * 
+ *
  * @description
- * The main homepage component for the Next.js application. 
- * Has layout: SideMenu, LessonFeed, AdMenu. 
- * 
+ * The main homepage component for the Next.js application.
+ * Has layout: SideMenu, LessonFeed, AdMenu.
+ *
  * @remarks
  * Structured and interactive user interface.
- * 
+ *
  * @dependencies
  * - `@/components/layout/AdMenu`: For displaying advertisements.
  * - `@/components/layout/LessonFeed`: For displaying the lesson feed.
@@ -16,16 +16,15 @@
 
 import { AdMenu } from "@/components/layout/ad-menu";
 import { LessonFeed } from "@/components/layout/lesson-feed";
+import { PageRow } from "@/components/layout/page-row";
 import { SideMenu } from "@/components/layout/side-menu";
 
 export default function HomePage() {
   return (
-    <main className="bg-muted/40">
-      <div className="mx-auto flex w-full max-w-full gap-6 px-4 py-6 lg:px-8">
-        <SideMenu />
-        <LessonFeed />
-        <AdMenu />
-      </div>
-    </main>
+    <PageRow>
+      <SideMenu />
+      <LessonFeed />
+      <AdMenu />
+    </PageRow>
   );
 }
