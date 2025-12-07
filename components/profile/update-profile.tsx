@@ -11,6 +11,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import Image from "next/image";
 
 export function UpdateProfile() {
   return (
@@ -32,7 +33,15 @@ export function UpdateProfile() {
               Profile Image
             </Label>
             <div className="flex items-center gap-4">
-              <div className="h-16 w-16 overflow-hidden rounded-full bg-muted" />
+              <div className="h-16 w-16 overflow-hidden rounded-full bg-muted">
+                <Image
+                src="/images/pfp-bjgraves.png"
+                alt="User avatar"
+                width={40}
+                height={40}
+                className="h-full w-full object-cover"
+              />
+              </div>
               <Button
                 type="button"
                 variant="default"
@@ -41,16 +50,6 @@ export function UpdateProfile() {
                 Change image
               </Button>
             </div>
-          </div>
-
-          {/* Full name */}
-          <div className="space-y-2">
-            <Label htmlFor="fullName">Full Name</Label>
-            <Input
-              id="fullName"
-              name="fullName"
-              placeholder="John Doe"
-            />
           </div>
 
           {/* Username */}

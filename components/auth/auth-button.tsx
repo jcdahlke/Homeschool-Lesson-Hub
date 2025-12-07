@@ -69,7 +69,7 @@ export async function AuthButton() {
   // ELSE, LOGGED IN
 
   /** TODO: update this to get profilePicture from database */
-  const profilePicture = "/default-profile-picture.png";
+  const avatar = "/images/pfp-bjgraves.png";
 
   return (
     <div className="flex items-center gap-6">
@@ -88,7 +88,7 @@ export async function AuthButton() {
       {/* Profile Button */}
       <Link href="/profile">
         <img
-          src={profilePicture || "/default-profile-picture.png"}
+          src={avatar || "/images/pfp-default.png"}
           className="h-12 w-12 rounded-full object-cover border"
         />
       </Link>
