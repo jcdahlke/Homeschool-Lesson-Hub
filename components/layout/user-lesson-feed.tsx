@@ -36,7 +36,7 @@ export function UserLessonFeed() {
                 {/* Avatar */}
                 <div className="h-10 w-10 rounded-full overflow-hidden bg-muted">
                   <Image
-                    src="/images/pfp-default.png"
+                    src="/images/pfp-bjgraves.png"
                     alt="User avatar"
                     width={40}
                     height={40}
