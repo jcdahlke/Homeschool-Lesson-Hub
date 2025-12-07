@@ -1,12 +1,12 @@
-import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
+import { Card, CardContent } from "../ui/card";
 
-export function LessonFeed() {
+export function UserLessonFeed() {
   return (
     <section className="flex-1 space-y-4">
       {/* Page title */}
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Lessons</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">My Lessons</h1>
       </div>
 
       {/* Filter chips */}
@@ -27,13 +27,14 @@ export function LessonFeed() {
 
       {/* Lesson cards – replace with real data later */}
       <div className="space-y-5">
-        {[1, 2, 3, 4].map((i) => (
+        {[1, 2, 3].map((i) => (
           <Card key={i} className="shadow-sm">
             <CardContent className="py-6 space-y-6">
+
               {/* Header */}
               <div className="flex items-start gap-3">
                 {/* Avatar */}
-                <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full bg-muted">
+                <div className="h-10 w-10 rounded-full overflow-hidden bg-muted">
                   <Image
                     src="/images/pfp-default.png"
                     alt="User avatar"
@@ -42,20 +43,21 @@ export function LessonFeed() {
                     className="h-full w-full object-cover"
                   />
                 </div>
-                {/* Name + time + menu */}
+
+                {/* @username + time */}
                 <div className="flex-1">
                   <div className="flex items-start justify-between">
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-xs text-muted-foreground leading-tight">
                       <div className="font-medium text-sm text-foreground">
-                        @sample_user{i}
+                        @bjgraves
                       </div>
                       <div>5 min ago</div>
                     </div>
 
                     {/* Menu dots */}
-                    <div className="mt-1 h-6 w-6 flex-shrink-0 rounded-full text-muted-foreground">
-                      ···
-                    </div>
+                    <button className="mt-1 h-6 w-6 flex items-center justify-center text-lg text-muted-foreground">
+                      •••
+                    </button>
                   </div>
                 </div>
               </div>
@@ -64,7 +66,7 @@ export function LessonFeed() {
               <div className="space-y-2">
                 <h2 className="text-sm font-semibold">Sample Lesson Title</h2>
                 <p className="text-sm text-muted-foreground">
-                  Short lesson description. Lorem ipsum dolor sit amet,
+                  Short Lesson Description. Lorem ipsum dolor sit amet,
                   consectetur adipiscing elit. Consequat aliquet maecenas ut sit
                   nulla.
                 </p>
@@ -72,7 +74,7 @@ export function LessonFeed() {
 
               {/* Tags */}
               <div className="flex flex-wrap gap-1">
-                {["math", "fractions", "hands-on"].map((tag) => (
+                {["golang", "linux", "overflow"].map((tag) => (
                   <span
                     key={tag}
                     className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground"
@@ -81,6 +83,7 @@ export function LessonFeed() {
                   </span>
                 ))}
               </div>
+
             </CardContent>
           </Card>
         ))}
