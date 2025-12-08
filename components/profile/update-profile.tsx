@@ -1,5 +1,7 @@
-// components/profile/update-profile.tsx
+"use client";
 
+import { useState } from "react";
+import { updateProfile } from "@/app/profile/actions"; // Import the backend action
 import {
   Card,
   CardHeader,
@@ -12,78 +14,124 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
-export function UpdateProfile() {
+// Define the shape of the data we expect
+interface ProfileData {
+  full_name: string | null;
+  username: string | null;
+  bio: string | null;
+  profile_image: string | null;
+}
+
+export function UpdateProfile({ initialData }: { initialData: ProfileData | null }) {
+  const [status, setStatus] = useState<{
+    error?: string;
+    success?: string;
+  } | null>(null);
+
+  const handleSubmit = async (formData: FormData) => {
+    setStatus(null);
+    const result = await updateProfile(formData);
+    if (result) {
+      setStatus(result);
+    }
+  };
+
   return (
     <section className="flex-1">
       <Card className="shadow-sm">
         <CardHeader className="border-b">
-          <CardTitle className="text-2xl font-semibold">
-            Update Profile
-          </CardTitle>
+          <CardTitle className="text-2xl font-semibold">Update Profile</CardTitle>
           <CardDescription>
             Manage your profile on Homeschool Lesson Hub.
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-8 pt-6">
-          {/* Profile image row */}
-          <div className="space-y-3">
-            <Label className="text-xs font-semibold uppercase text-muted-foreground">
-              Profile Image
-            </Label>
-            <div className="flex items-center gap-4">
-              <div className="h-16 w-16 overflow-hidden rounded-full bg-muted" />
+        {/* Connect the form to the wrapper function */}
+        <form action={handleSubmit}>
+          <CardContent className="space-y-8 pt-6">
+            
+            {/* Profile Image Display */}
+            <div className="space-y-3">
+              <Label className="text-xs font-semibold uppercase text-muted-foreground">
+                Profile Image
+              </Label>
+              <div className="flex items-center gap-4">
+                {initialData?.profile_image ? (
+                  <img 
+                    src={initialData.profile_image} 
+                    alt="Profile" 
+                    className="h-16 w-16 rounded-full object-cover bg-muted"
+                  />
+                ) : (
+                  <div className="h-16 w-16 rounded-full bg-muted" />
+                )}
+                {/* File Input for Upload */}
+                <Input 
+                  id="profileImage" 
+                  name="profileImage" 
+                  type="file" 
+                  accept="image/*"
+                  className="w-full max-w-xs"
+                />
+              </div>
+            </div>
+
+            {/* Full Name */}
+            <div className="space-y-2">
+              <Label htmlFor="fullName">Full Name</Label>
+              <Input
+                id="fullName"
+                name="fullName"
+                placeholder="John Doe"
+                defaultValue={initialData?.full_name || ""} 
+              />
+            </div>
+
+            {/* Username */}
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                name="username"
+                placeholder="@johndoe"
+                defaultValue={initialData?.username || ""}
+              />
+            </div>
+
+            {/* About Me */}
+            <div className="space-y-2">
+              <Label htmlFor="about">About me</Label>
+              <Textarea
+                id="about"
+                name="about"
+                rows={5}
+                placeholder="Write a short introduction..."
+                defaultValue={initialData?.bio || ""}
+              />
+            </div>
+
+            {/* Status Messages */}
+            {status?.error && (
+              <div className="text-sm font-medium text-red-500">
+                {status.error}
+              </div>
+            )}
+            {status?.success && (
+              <div className="text-sm font-medium text-green-600">
+                {status.success}
+              </div>
+            )}
+
+            <div className="flex justify-end">
               <Button
-                type="button"
-                variant="default"
+                type="submit"
                 className="bg-brandGreen text-white hover:bg-brandGreen/90"
               >
-                Change image
+                Save changes
               </Button>
             </div>
-          </div>
-
-          {/* Full name */}
-          <div className="space-y-2">
-            <Label htmlFor="fullName">Full Name</Label>
-            <Input
-              id="fullName"
-              name="fullName"
-              placeholder="John Doe"
-            />
-          </div>
-
-          {/* Username */}
-          <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              name="username"
-              placeholder="@johndoe"
-            />
-          </div>
-
-          {/* About me */}
-          <div className="space-y-2">
-            <Label htmlFor="about">About me</Label>
-            <Textarea
-              id="about"
-              name="about"
-              rows={5}
-              placeholder="Write a short introduction about yourself for others to read."
-            />
-          </div>
-
-          {/* Save button aligned to the right */}
-          <div className="flex justify-end">
-            <Button
-              type="submit"
-              className="bg-brandGreen text-white hover:bg-brandGreen/90"
-            >
-              Save changes
-            </Button>
-          </div>
-        </CardContent>
+          </CardContent>
+        </form>
       </Card>
     </section>
   );

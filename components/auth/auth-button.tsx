@@ -33,7 +33,8 @@
 
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { createClient } from "@/lib/supabase/server";
+// Ensure this path matches where you created the file (utils vs lib)
+import { createClient } from "@/utils/supabase/server"; 
 import { Plus, UserPlus } from "lucide-react";
 
 export async function AuthButton() {
@@ -68,12 +69,24 @@ export async function AuthButton() {
 
   // ELSE, LOGGED IN
 
-  /** TODO: update this to get profilePicture from database */
-  const profilePicture = "/default-profile-picture.png";
+  // 2. LOGGED IN STATE: Fetch Profile Picture
+  let profilePicture = "/default-profile-picture.png";
+
+  // Query the app_user table to get the custom image
+  const { data: profile } = await supabase
+    .from("app_user")
+    .select("profile_image")
+    .eq("supabase_id", user.id)
+    .single();
+
+  // If they have a custom image, use it
+  if (profile?.profile_image) {
+    profilePicture = profile.profile_image;
+  }
 
   return (
     <div className="flex items-center gap-6">
-      {/* Create Lesson  */}
+      {/* Create Lesson Button */}
       <Button
         asChild
         size="md"
@@ -85,11 +98,12 @@ export async function AuthButton() {
         </Link>
       </Button>
 
-      {/* Profile Button */}
+      {/* Profile Picture Link */}
       <Link href="/profile">
         <img
-          src={profilePicture || "/default-profile-picture.png"}
-          className="h-12 w-12 rounded-full object-cover border"
+          src={profilePicture}
+          alt="User Profile"
+          className="h-12 w-12 rounded-full object-cover border border-gray-200"
         />
       </Link>
     </div>

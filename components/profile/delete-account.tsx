@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { deleteAccount } from "@/app/profile/actions";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,6 +9,17 @@ import { Label } from "@/components/ui/label";
 
 export function DeleteAccount() {
   const [confirmed, setConfirmed] = React.useState(false);
+  const [isDeleting, setIsDeleting] = React.useState(false);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await deleteAccount();
+    } catch (error) {
+      console.error("Failed to delete account", error);
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <section className="flex-1">
@@ -27,14 +39,11 @@ export function DeleteAccount() {
                 saved lessons, or favorites.
               </li>
               <li>
-                Lessons and comments you&apos;ve shared will remain on
-                Homeschool Lesson Hub so they can continue helping other
-                families, but your name and profile will be removed. Your
-                content will appear as posted by &quot;Deleted user.&quot;
+                Lessons and comments you&apos;ve shared will remain on Homeschool
+                Lesson Hub but your name will be removed.
               </li>
               <li>
-                This only affects your Homeschool Lesson Hub account. It does
-                not delete any accounts you may have on other sites or services.
+                This only affects your Homeschool Lesson Hub account.
               </li>
             </ul>
           </div>
@@ -50,18 +59,18 @@ export function DeleteAccount() {
               className="text-xs leading-relaxed text-muted-foreground"
             >
               I have read the information above and understand that deleting my
-              account is permanent and cannot be undone. I want to delete my
-              Homeschool Lesson Hub account.
+              account is permanent and cannot be undone.
             </Label>
           </div>
 
           <div className="pt-2">
             <Button
               type="button"
-              disabled={!confirmed}
+              disabled={!confirmed || isDeleting}
+              onClick={handleDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-60"
             >
-              Delete account
+              {isDeleting ? "Deleting..." : "Delete account"}
             </Button>
           </div>
         </CardContent>
