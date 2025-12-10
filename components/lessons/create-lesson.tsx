@@ -49,7 +49,7 @@ function LessonTypeStep({
   return (
     <Card className="mx-auto max-w-3xl">
       <CardHeader className="pb-4">
-        <CardTitle className="text-sm font-semibold">
+        <CardTitle className="text-md font-semibold">
           Lesson Type<span className="ml-0.5 text-red-600">*</span>
         </CardTitle>
         <p className="mt-1 text-[11px] text-muted-foreground">
@@ -59,7 +59,7 @@ function LessonTypeStep({
 
       <CardContent className="pt-0 pb-6">
         <Select onValueChange={value => onSelectType(value as LessonType)}>
-          <SelectTrigger className="h-9 rounded-sm text-xs">
+          <SelectTrigger className="h-9 rounded-sm text-sm">
             <SelectValue placeholder="Choose lesson type" />
           </SelectTrigger>
           <SelectContent>

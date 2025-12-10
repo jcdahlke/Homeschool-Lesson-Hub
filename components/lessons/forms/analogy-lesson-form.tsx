@@ -91,7 +91,7 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
         <CardContent className="space-y-6 pt-2 pb-6">
           {/* Title */}
           <div className="space-y-1">
-            <Label htmlFor="title" className="text-xs font-semibold">
+            <Label htmlFor="title" className="text-md font-semibold">
               Title<span className="ml-0.5 text-red-600">*</span>
             </Label>
             <p className="text-[11px] text-muted-foreground">
@@ -109,7 +109,7 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
 
           {/* Description */}
           <div className="space-y-1">
-            <Label htmlFor="description" className="text-xs font-semibold">
+            <Label htmlFor="description" className="text-md font-semibold">
               Description<span className="ml-0.5 text-red-600">*</span>
             </Label>
             <p className="text-[11px] text-muted-foreground">
@@ -121,14 +121,14 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
               name="description"
               required
               maxLength={250}
-              className="min-h-[72px] rounded-sm text-xs"
+              className="min-h-[72px] rounded-sm text-sm"
               placeholder="Type lesson description"
             />
           </div>
 
           {/* Subjects */}
           <div className="space-y-1">
-            <Label className="text-xs font-semibold">
+            <Label className="text-md font-semibold">
               Subjects<span className="ml-0.5 text-red-600">*</span>
             </Label>
             <p className="text-[11px] text-muted-foreground">
@@ -149,7 +149,7 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
               ))}
 
               <input
-                className="min-w-[80px] flex-1 bg-transparent text-xs outline-none placeholder:text-muted-foreground"
+                className="min-w-[80px] flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                 placeholder={
                   subjects.length ? "" : "Type subject and press Enter"
                 }
@@ -167,7 +167,7 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
 
           {/* Age range */}
           <div className="space-y-1">
-            <Label className="text-xs font-semibold">
+            <Label className="text-md font-semibold">
               Age Range<span className="ml-0.5 text-red-600">*</span>
             </Label>
             <p className="text-[11px] text-muted-foreground">
@@ -175,7 +175,6 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
             </p>
 
             <RadioGroup
-              className="mt-2 space-y-2 text-xs"
               value={ageRange}
               onValueChange={setAgeRange}
             >
@@ -191,7 +190,7 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
                   />
                   <Label
                     htmlFor={`age-${range.value}`}
-                    className="text-xs font-normal"
+                    className="text-sm font-normal"
                   >
                     {range.label}
                   </Label>
@@ -204,7 +203,7 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
           <div className="space-y-1">
             <Label
               htmlFor="comparisonObject"
-              className="text-xs font-semibold"
+              className="text-md font-semibold"
             >
               Comparison Object<span className="ml-0.5 text-red-600">*</span>
             </Label>
@@ -215,14 +214,14 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
               id="comparisonObject"
               name="comparisonObject"
               required
-              className="h-9 rounded-sm text-xs"
+              className="h-9 rounded-sm text-sm"
               placeholder="Type comparison object"
             />
           </div>
 
           {/* Lesson plan */}
           <div className="space-y-1">
-            <Label htmlFor="lessonPlan" className="text-xs font-semibold">
+            <Label htmlFor="lessonPlan" className="text-md font-semibold">
               Lesson Plan<span className="ml-0.5 text-red-600">*</span>
             </Label>
             <p className="text-[11px] text-muted-foreground">
@@ -232,25 +231,25 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
               id="lessonPlan"
               name="lessonPlan"
               required
-              className="min-h-[220px] rounded-sm text-xs"
+              className="min-h-[220px] rounded-sm text-sm"
               placeholder="Type your lesson plan"
             />
           </div>
 
           {/* Footer buttons */}
-          <div className="mt-4 flex justify-end gap-3 border-t pt-4">
+          <div className="mt-4 flex justify-end gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
               size="sm"
-              className="h-8 rounded-full px-4 text-xs"
+              className="h-8 rounded-full px-4 text-sm"
             >
               Save as draft
             </Button>
             <Button
               type="submit"
               size="sm"
-              className="h-8 rounded-full bg-brandGreen px-6 text-xs text-white hover:bg-brandGreenDark"
+              className="h-8 rounded-full bg-brandGreen px-6 text-sm text-white hover:bg-brandGreenDark"
             >
               Publish
             </Button>

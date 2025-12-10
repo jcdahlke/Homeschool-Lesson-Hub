@@ -17,9 +17,9 @@ type Props = {
 
 export function LessonFormHeader({ value, onChange }: Props) {
   return (
-    <div className="space-y-1 pb-4 border-b">
+    <div className="space-y-1">
       <div>
-        <CardTitle className="text-sm font-semibold">
+        <CardTitle className="text-md font-semibold">
           Lesson Type<span className="ml-0.5 text-red-600">*</span>
         </CardTitle>
         <p className="mt-1 text-[11px] text-muted-foreground">
@@ -27,12 +27,12 @@ export function LessonFormHeader({ value, onChange }: Props) {
         </p>
       </div>
 
-      <div className="mt-3 max-w-xs">
+      <div className="mt-3">
         <Select
           value={value}
           onValueChange={v => onChange(v as LessonType)}
         >
-          <SelectTrigger className="h-9 rounded-sm text-xs">
+          <SelectTrigger className="h-9 rounded-sm text-sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
