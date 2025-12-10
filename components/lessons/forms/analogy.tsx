@@ -5,7 +5,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { LessonType } from "../lesson-types";
-import { LessonFormHeader } from "./lesson-form-header";
+import { LessonFormHeader } from "./header";
 import {
   useSubjects,
   TitleField,
