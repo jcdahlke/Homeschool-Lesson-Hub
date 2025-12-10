@@ -1,22 +1,24 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 const FILTERS = ["New", "Interactive", "Video", "Analogy"];
 
 export function FilterBar() {
   const router = useRouter();
+  const pathname = usePathname(); // Get current path (e.g. /lessons/my-lessons)
   const searchParams = useSearchParams();
   const currentFilter = searchParams.get("filter") || "New";
 
   const handleFilterClick = (filter: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     if (filter === "New") {
-      params.delete("filter"); // Clean URL for default
+      params.delete("filter");
     } else {
       params.set("filter", filter);
     }
-    router.push(`/?${params.toString()}`); // Update URL, triggers server refresh
+    // Push to the CURRENT path, not just "/"
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
