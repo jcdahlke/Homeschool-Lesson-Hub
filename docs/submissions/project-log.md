@@ -21,14 +21,14 @@ Total: `26` Hours
 | Date  | Description   | Hours |
 | ----- | ------------- | ----- |
 | 11/07/2025 | Meeting with Joey: Discussed project structure, Made low-fi UI design  | 1.0 
-| 11/10/2025 | Organized code, Analyzed React code, Studied Vercel, Began Figma prototype design | 1.0 |
-| 11/11/2025 | Study React code, Continue Figma design | 3.0 |
-| 11/13/2025 | Continue Figma design | 2.5 |
+| 11/10/2025 | Code: Organized project structure, React: study existing code, Vercel: study existing code and connection, Figma: begin prototype design | 1.0 |
+| 11/11/2025 | React: study existing code, Figma: continue design | 3.0 |
+| 11/13/2025 | Figma: Continue building design | 2.5 |
 | 11/13/2025 | Meeting with Joey: Discussed UI design and database structure | 1.0 |
-| 11/20/2025 | Studied vercel code, Started writing React code for front end | 1.0 |
-| 11/21/2025 | Developing React code for front end | 7.5 |
+| 11/20/2025 | Vercel: Studied existing code, React stubs: lesson feed (home) | 1.0 |
+| 11/21/2025 | React stubs: lesson feed (home), header/footer, login/signup | 7.5 |
 | 12/03/2025 | Meeting with Joey: Planned project presentation and next steps | 1.0 |
-| 12/04/2025 | Figma Design User profile page | 2.0 |
+| 12/04/2025 | Figma: Design User profile page | 2.0 |
 | 12/06/2025 | React stubs: profile page, lessons feed, my-lessons, create lesson | 5.5 |
 | 12/10/2025 | React stubs: lesson types | 3.0 |
 <!-- | Date | Description | | -->
