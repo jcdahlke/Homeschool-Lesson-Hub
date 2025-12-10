@@ -76,7 +76,8 @@ export function DescriptionField() {
         Description<span className="ml-0.5 text-red-600">*</span>
       </Label>
       <p className="text-[11px] text-muted-foreground">
-        Write a description for others to see on first glance. Max 250 characters.
+        Write a description for others to see on first glance. Max 250
+        characters.
       </p>
       <Textarea
         id="description"
@@ -203,18 +204,21 @@ export function LessonPlanField() {
 export function FormFooterButtons() {
   return (
     <div className="mt-4 flex justify-end gap-3 pt-4">
-      <Button
+      {/* DRAFT BUTTON -- TODO: implement if taking project further */}
+      {/* <Button
         type="button"
         variant="outline"
         size="sm"
         className="h-8 rounded-full px-4 text-sm"
       >
         Save as draft
-      </Button>
+      </Button> */}
+
+      {/* SUBMIT BUTTON */}
       <Button
         type="submit"
-        size="sm"
-        className="h-8 rounded-full bg-brandGreen px-6 text-sm text-white hover:bg-brandGreenDark"
+        size="md"
+        className="px-8 bg-brandGreen hover:bg-brandGreenDark flex items-center gap-2"
       >
         Publish
       </Button>
