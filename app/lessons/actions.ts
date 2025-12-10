@@ -74,6 +74,7 @@ export async function getLessons(filter: string = "New", searchQuery?: string) {
         lesson_id,
         title,
         description,
+        lesson_plan,
         created_at,
         author:app_user(username, profile_image),
         lesson_topic(topic(topic_name)),
@@ -101,6 +102,7 @@ export async function getLessons(filter: string = "New", searchQuery?: string) {
     lesson_id,
     title,
     description,
+    lesson_plan,
     created_at,
     author:app_user(username, profile_image),
     lesson_topic(topic(topic_name))
@@ -127,4 +129,63 @@ export async function getLessons(filter: string = "New", searchQuery?: string) {
   }
 
   return data.map(transformLessonData);
+}
+
+// ---------------------------------------------------------
+// NEW: Get lessons for the CURRENT USER only
+// ---------------------------------------------------------
+export async function getMyLessons(filter: string = "New") {
+  const supabase = await createClient();
+
+  // 1. Get current user
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return [];
+
+  // 2. Get their public ID
+  const { data: appUser } = await supabase
+    .from("app_user")
+    .select("user_id")
+    .eq("supabase_id", user.id)
+    .single();
+
+  if (!appUser) return [];
+
+  // 3. Build Query (Similar to getLessons but filtered by author)
+  let selectQuery = `
+    lesson_id,
+    title,
+    description,
+    lesson_plan,
+    created_at,
+    author:app_user(username, profile_image),
+    lesson_topic(topic(topic_name))
+  `;
+
+  // Apply Join Filters
+  if (filter === "Interactive") selectQuery += `, interactive_lesson!inner(*)`;
+  else if (filter === "Video") selectQuery += `, video_lesson!inner(*)`;
+  else if (filter === "Analogy") selectQuery += `, analogy_lesson!inner(*)`;
+  else selectQuery += `, interactive_lesson(*), video_lesson(*), analogy_lesson(*)`;
+
+  // Fetch data
+  const { data, error } = await supabase
+    .from("lesson")
+    .select(selectQuery)
+    .eq("author_id", appUser.user_id) // <--- THE KEY DIFFERENCE
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching my lessons:", error);
+    return [];
+  }
+
+  // Reuse the transform function (copy it from above if not exported, or duplicate logic)
+  return data.map((lesson: any) => {
+    let calculatedType = "General";
+    if (lesson.interactive_lesson?.length > 0 || lesson.interactive_lesson) calculatedType = "interactive_lesson";
+    else if (lesson.video_lesson?.length > 0 || lesson.video_lesson) calculatedType = "video_lesson";
+    else if (lesson.analogy_lesson?.length > 0 || lesson.analogy_lesson) calculatedType = "analogy_lesson";
+
+    return { ...lesson, lesson_type: calculatedType };
+  });
 }
