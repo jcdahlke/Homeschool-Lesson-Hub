@@ -2,6 +2,7 @@ import Image from "next/image";
 import { BookOpen } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import type { User } from "@supabase/supabase-js";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 
 type UserInfoSidebarProps = {
   user: User;
@@ -10,7 +11,9 @@ type UserInfoSidebarProps = {
 
 export function UserInfoSidebar({ user, lessonsCount }: UserInfoSidebarProps) {
   const rawUsername =
-    (user.user_metadata as any)?.username || user.email?.split("@")[0] || "user";
+    (user.user_metadata as any)?.username ||
+    user.email?.split("@")[0] ||
+    "user";
 
   // ensure we don't end up with @@something
   const username = rawUsername.replace(/^@/, "");
@@ -22,16 +25,11 @@ export function UserInfoSidebar({ user, lessonsCount }: UserInfoSidebarProps) {
     <aside className="hidden w-72 shrink-0 xl:block">
       <Card className="h-fit">
         <CardContent className="flex flex-col items-center gap-4 py-6">
-          {/* Avatar */}
-          <div className="aspect-square w-32 overflow-hidden rounded-full bg-muted">
-            <Image
-              src={avatarUrl}
-              alt={username}
-              width={128}
-              height={128}
-              className="h-full w-full object-cover"
-            />
-          </div>
+
+          <Avatar className="w-32 h-32">
+            <AvatarImage src={avatarUrl} />
+            <AvatarFallback>{username[0]}</AvatarFallback>
+          </Avatar>
 
           {/* Username only */}
           <p className="mt-1 text-base font-semibold">@{username}</p>
