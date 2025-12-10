@@ -42,7 +42,7 @@ type AnalogyLessonPayload = {
 export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
   const [subjects, setSubjects] = React.useState<string[]>([]);
   const [subjectInput, setSubjectInput] = React.useState("");
-  const [ageRange, setAgeRange] = React.useState("5-8");
+  const [ageRange, setAgeRange] = React.useState("");
 
   function addSubject() {
     const value = subjectInput.trim();
@@ -75,7 +75,7 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
     };
 
     // TODO: send to Supabase / API route
-    console.log("Analogy payload", payload);
+    console.log("Analogy lesson payload", payload);
   }
 
   return (
