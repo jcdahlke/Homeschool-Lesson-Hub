@@ -11,7 +11,7 @@ export function UserLessonFeed() {
 
       {/* Filter chips */}
       <div className="flex flex-wrap gap-2">
-        {["New", "Interactive", "Video", "Analogy"].map((label, i) => (
+        {["New", "Analogy", "Interactive", "Video"].map((label, i) => (
           <button
             key={label}
             className={`rounded-full border px-3 py-1 text-xs font-medium ${
