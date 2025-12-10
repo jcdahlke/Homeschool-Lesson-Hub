@@ -66,50 +66,46 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
-import { FormEvent, useEffect, Suspense } from "react";
+import { FormEvent, Suspense } from "react";
 
 type Props = {
   className?: string;
 };
 
-// 1. INNER LOGIC (Not exported)
-// This handles the inputs and params.
+// 1. INNER LOGIC
 function SearchBarContent({ className }: Props) {
-  // HOOKS FIRST (Always run these)
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // EFFECTS SECOND
-  useEffect(() => {
-    // Clears the search param from URL after loading
-    if (searchParams?.has("q")) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.delete("q");
-      router.replace(`${pathname}?${params.toString()}`);
-    }
-  }, [pathname, router, searchParams]);
+  // REMOVED: The useEffect that cleared the 'q' param.
+  // We WANT the 'q' param to stay in the URL so the server knows what to search for.
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const q = String(formData.get("q") || "").trim();
 
+    // Preserve existing filters while searching
     const params = new URLSearchParams(searchParams?.toString());
-    if (q) params.set("q", q);
-    else params.delete("q");
+    
+    if (q) {
+      params.set("q", q);
+    } else {
+      params.delete("q");
+    }
 
-    router.push(`${pathname}?${params.toString()}`);
+    // Reset page to home if on a different page, but keep params
+    const targetPath = pathname.startsWith("/lessons/") ? "/" : pathname;
+    
+    router.push(`${targetPath}?${params.toString()}`);
   };
 
-  // CONDITIONAL RETURNS LAST
-  // Only return null after all hooks have run
   const hiddenRoutes = ["/auth/login", "/auth/sign-up"];
   if (pathname && hiddenRoutes.includes(pathname)) {
     return null;
   }
 
-  // RENDER UI
   return (
     <form
       onSubmit={handleSubmit}
@@ -129,11 +125,10 @@ function SearchBarContent({ className }: Props) {
   );
 }
 
-// 2. EXPORTED COMPONENT (Wrapper)
-// This is what Header.tsx imports. It wraps the logic in Suspense.
+// 2. EXPORTED WRAPPER
 export function SearchBar(props: Props) {
   return (
-    <Suspense fallback={<div className="w-full max-w-xl h-10" />}>
+    <Suspense fallback={<div className="w-full max-w-xl h-10 bg-muted/20 rounded-md" />}>
       <SearchBarContent {...props} />
     </Suspense>
   );

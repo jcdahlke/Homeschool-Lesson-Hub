@@ -1,10 +1,102 @@
 import { createClient } from "@/utils/supabase/server";
+import OpenAI from "openai";
 
-export async function getLessons(filter: string = "New") {
+// Helper function to format the raw database result for the UI
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function transformLessonData(lesson: any) {
+  let calculatedType = "General";
+
+  const isInteractive = Array.isArray(lesson.interactive_lesson)
+    ? lesson.interactive_lesson.length > 0
+    : !!lesson.interactive_lesson;
+
+  const isVideo = Array.isArray(lesson.video_lesson)
+    ? lesson.video_lesson.length > 0
+    : !!lesson.video_lesson;
+
+  const isAnalogy = Array.isArray(lesson.analogy_lesson)
+    ? lesson.analogy_lesson.length > 0
+    : !!lesson.analogy_lesson;
+
+  if (isInteractive) calculatedType = "interactive_lesson";
+  else if (isVideo) calculatedType = "video_lesson";
+  else if (isAnalogy) calculatedType = "analogy_lesson";
+
+  return {
+    ...lesson,
+    lesson_type: calculatedType,
+  };
+}
+
+export async function getLessons(filter: string = "New", searchQuery?: string) {
   const supabase = await createClient();
 
-  // 1. Build the SELECT string
-  // We always want the base lesson details, author, and topics.
+  // ---------------------------------------------------------
+  // PATH A: VECTOR SEARCH (If user typed something)
+  // ---------------------------------------------------------
+  if (searchQuery && searchQuery.trim().length > 0) {
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    // 1. Generate Embedding for the search query
+    const embeddingResponse = await openai.embeddings.create({
+      model: "text-embedding-3-small",
+      input: searchQuery,
+    });
+    const embedding = embeddingResponse.data[0].embedding;
+
+    // 2. Call the Database RPC function
+    const { data: rpcData, error: rpcError } = await supabase.rpc(
+      "get_closest_lessons",
+      {
+        query_vector: embedding,
+        match_count: 10, // Top 10 results
+      }
+    );
+
+    if (rpcError) {
+      console.error("Vector search error:", rpcError);
+      return [];
+    }
+
+    if (!rpcData || rpcData.length === 0) return [];
+
+    // 3. Hydrate the Data (Fetch Author & Topics)
+    // The RPC returns lesson details, but we need the relations (author, topics)
+    // We fetch the full objects for the specific IDs returned by the search.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const lessonIds = rpcData.map((l: any) => l.lesson_id);
+
+    const { data: fullLessons, error: fetchError } = await supabase
+      .from("lesson")
+      .select(`
+        lesson_id,
+        title,
+        description,
+        created_at,
+        author:app_user(username, profile_image),
+        lesson_topic(topic(topic_name)),
+        interactive_lesson(*), video_lesson(*), analogy_lesson(*)
+      `)
+      .in("lesson_id", lessonIds);
+
+    if (fetchError || !fullLessons) return [];
+
+    // 4. Sort by Relevance
+    // The .in() query does not preserve order. We must manually sort the full lessons
+    // to match the order of IDs returned by the vector search (most relevant first).
+    const sortedLessons = lessonIds
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((id: number) => fullLessons.find((l: any) => l.lesson_id === id))
+      .filter(Boolean); // Remove any undefined entries
+
+    return sortedLessons.map(transformLessonData);
+  }
+
+  // ---------------------------------------------------------
+  // PATH B: STANDARD FILTERING (Default Feed)
+  // ---------------------------------------------------------
   let selectQuery = `
     lesson_id,
     title,
@@ -14,21 +106,13 @@ export async function getLessons(filter: string = "New") {
     lesson_topic(topic(topic_name))
   `;
 
-  // 2. Handle Filtering via JOINS
-  // Ideally, we want to know if a lesson is Interactive, Video, or Analogy.
-  // Strategy:
-  // - If the user selects a filter (e.g., "Video"), we use '!inner' join on 'video_lesson'.
-  //   This forces the database to ONLY return lessons that exist in the video_lesson table.
-  // - If the filter is "New" (All), we 'left join' all tables so we can check which one exists.
-
   if (filter === "Interactive") {
-    selectQuery += `, interactive_lesson!inner(*)`; 
+    selectQuery += `, interactive_lesson!inner(*)`;
   } else if (filter === "Video") {
     selectQuery += `, video_lesson!inner(*)`;
   } else if (filter === "Analogy") {
     selectQuery += `, analogy_lesson!inner(*)`;
   } else {
-    // Fetch ALL types (Standard Left Join)
     selectQuery += `, interactive_lesson(*), video_lesson(*), analogy_lesson(*)`;
   }
 
@@ -42,35 +126,5 @@ export async function getLessons(filter: string = "New") {
     return [];
   }
 
-  // 3. Transform the Data
-  // Your frontend expects a 'lesson_type' property to display the badge.
-  // Since we removed the column, we calculate it here based on which sub-table has data.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const formattedData = data.map((lesson: any) => {
-    let calculatedType = "General";
-
-    // Check which child table is not null/empty
-    const isInteractive = Array.isArray(lesson.interactive_lesson) 
-      ? lesson.interactive_lesson.length > 0 
-      : !!lesson.interactive_lesson;
-
-    const isVideo = Array.isArray(lesson.video_lesson) 
-      ? lesson.video_lesson.length > 0 
-      : !!lesson.video_lesson;
-
-    const isAnalogy = Array.isArray(lesson.analogy_lesson) 
-      ? lesson.analogy_lesson.length > 0 
-      : !!lesson.analogy_lesson;
-
-    if (isInteractive) calculatedType = "interactive_lesson";
-    else if (isVideo) calculatedType = "video_lesson";
-    else if (isAnalogy) calculatedType = "analogy_lesson";
-
-    return {
-      ...lesson,
-      lesson_type: calculatedType, // We manually add this back so the UI works
-    };
-  });
-
-  return formattedData;
+  return data.map(transformLessonData);
 }
