@@ -23,6 +23,7 @@ export function ProfileSideMenu() {
             MENU
           </CardTitle>
         </CardHeader>
+        
         <CardContent className="p-3 pt-3">
           <nav className="space-y-1 text-sm">
             {items.map((item) => {

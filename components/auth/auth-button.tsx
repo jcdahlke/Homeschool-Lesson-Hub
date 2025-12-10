@@ -92,7 +92,7 @@ export async function AuthButton() {
         size="md"
         className="px-8 bg-brandGreen hover:bg-brandGreenDark flex items-center gap-2"
       >
-        <Link href="/lessons/new">
+        <Link href="/lessons/create">
           <Plus className="h-4 w-4" />
           Create a Lesson
         </Link>
