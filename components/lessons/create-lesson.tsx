@@ -10,9 +10,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { LessonType } from "./lesson-types";
-import { AnalogyLessonForm } from "./forms/analogy-lesson-form";
-import { InteractiveLessonForm } from "./forms/interactive-lesson-form";
-import { VideoLessonForm } from "./forms/video-lesson-form";
+import { AnalogyLessonForm } from "./forms/analogy";
+import { InteractiveLessonForm } from "./forms/interactive";
+import { VideoLessonForm } from "./forms/video";
 
 /* ------------------- TOP-LEVEL FLOW ------------------- */
 
