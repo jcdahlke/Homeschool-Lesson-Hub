@@ -7,7 +7,7 @@
 This project is a Next.js-based web application designed to give homsechoolers a one-stop-shop for interactive lesson ideas. It allows anybody to see the lessons others have posted, and it allows autheticated users to add to the community, since it is a community driven site. It also incorporates a vector search feature to allow for easy lookup of lessons you are looking for.
 
 ## Demo
-https://byu-my.sharepoint.com/:v:/r/personal/bedwardz_byu_edu/Documents/Microsoft%20Teams%20Chat%20Files/demo.mp4?csf=1&web=1&e=Eek5hH&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJUZWFtcyIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJwb3N0cm9sbC1jb3B5bGluayIsInJlZmVycmFsUGxheWJhY2tTZXNzaW9uSWQiOiIwYzU0ZjI4ZS1mOGFhLTQ4MmQtYWQwMC1jN2M4ZjczZWY0OTEifX0%3D
+https://byu-my.sharepoint.com/:v:/r/personal/bedwardz_byu_edu/Documents/Microsoft%20Teams%20Chat%20Files/demo%201.mp4?csf=1&web=1&e=crC7bj&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJUZWFtcyIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJwb3N0cm9sbC1jb3B5bGluayIsInJlZmVycmFsUGxheWJhY2tTZXNzaW9uSWQiOiIzMWVhNTIwNi05YTI5LTQ3ZDYtODg4ZS00ZTEyMjA5MjQ1OGIifX0%3D
  
 
 ## What did you learn in this project?
