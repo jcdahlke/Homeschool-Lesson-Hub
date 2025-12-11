@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createLesson } from "@/app/lessons/actions"; // Import the Server Action
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -8,10 +9,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { LessonType } from "../lesson-types";
 import { LessonFormHeader } from "./header";
 import {
-  useSubjects,
+  useTopics,
   TitleField,
   DescriptionField,
-  SubjectsField,
+  TopicsField,
+  SubjectField,
   AgeRangeField,
   LessonPlanField,
   FormFooterButtons,
@@ -29,64 +31,72 @@ type Props = {
   onChangeType: (type: LessonType) => void;
 };
 
-type InteractiveLessonPayload = {
-  lessonType: LessonType;
-  title: string;
-  description: string;
-  subjects: string[];
-  ageRange: string;
-  prepTime: string;
-  materials: string;
-  lessonPlan: string;
-};
-
 export function InteractiveLessonForm({ lessonType, onChangeType }: Props) {
-  const { subjects, subjectInput, setSubjectInput, addSubject, removeSubject } =
-    useSubjects();
+  // 1. Hooks & State
+  const { topics, topicInput, setTopicInput, addTopic, removeTopic } = useTopics();
   const [ageRange, setAgeRange] = React.useState("");
   const [prepTime, setPrepTime] = React.useState("");
+  const [subject, setSubject] = React.useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  // 2. Submit Handler
+  async function handleSubmit(formData: FormData) {
+    // Manually append controlled state/arrays if needed by the backend action.
+    // Note: Since we added 'name' attributes to the inputs below, FormData 
+    // will already contain these values. We append 'topics' explicitly 
+    // to ensure the array format is handled if the backend expects multiple entries.
+    
+    topics.forEach((t) => formData.append("topics", t));
+    
+    // Controlled fields are also in FormData via their inputs, but appending
+    // ensures state is captured if the inputs were conditionally rendered or modified.
+    // Duplicate keys are usually handled by the server action reading the last value.
+    formData.append("ageRange", ageRange);
+    formData.append("subject", subject);
+    formData.append("prepTime", prepTime);
+    formData.append("lessonType", lessonType);
+    
+    // 'materials', 'title', 'description', and 'lessonPlan' are native inputs 
+    // with 'name' attributes, so they are auto-included.
 
-    const payload: InteractiveLessonPayload = {
-      lessonType,
-      title: (formData.get("title") as string) ?? "",
-      description: (formData.get("description") as string) ?? "",
-      subjects,
-      ageRange,
-      prepTime,
-      materials: (formData.get("materials") as string) ?? "",
-      lessonPlan: (formData.get("lessonPlan") as string) ?? "",
-    };
-
-    // TODO: send to Supabase / API route
-    console.log("Interactive lesson payload", payload);
+    // Send to Backend
+    await createLesson(formData);
   }
 
   return (
-    <Card className="mx-auto max-w-3xl">
-      <form onSubmit={handleSubmit}>
-        <CardHeader className="pb-3">
+    <Card className="mx-auto max-w-3xl shadow-sm">
+      <form action={handleSubmit}>
+        <CardHeader className="pb-3 border-b">
           <LessonFormHeader value={lessonType} onChange={onChangeType} />
         </CardHeader>
 
-        <CardContent className="space-y-6 pt-2 pb-6">
-          <TitleField />
-          <DescriptionField />
+        <CardContent className="space-y-6 pt-6 pb-6">
+          <TitleField name="title" />
+          <DescriptionField name="description" />
 
-          <SubjectsField
-            subjects={subjects}
-            subjectInput={subjectInput}
-            setSubjectInput={setSubjectInput}
-            addSubject={addSubject}
-            removeSubject={removeSubject}
+          {/* New Subject Field */}
+          <SubjectField 
+            value={subject} 
+            onChange={setSubject} 
+            name="subject"
           />
 
-          <AgeRangeField value={ageRange} onChange={setAgeRange} />
+          {/* Topics Field */}
+          <TopicsField
+            topics={topics}
+            topicInput={topicInput}
+            setTopicInput={setTopicInput}
+            addTopic={addTopic}
+            removeTopic={removeTopic}
+            name="topics"
+          />
 
-          {/* Prep Time (unique) */}
+          <AgeRangeField 
+            value={ageRange} 
+            onChange={setAgeRange} 
+            name="ageRange"
+          />
+
+          {/* Unique Field: Prep Time */}
           <div className="space-y-1">
             <Label className="text-md font-semibold">
               Prep Time<span className="ml-0.5 text-red-600">*</span>
@@ -95,7 +105,11 @@ export function InteractiveLessonForm({ lessonType, onChangeType }: Props) {
               Select a prep time from the options below.
             </p>
 
-            <RadioGroup value={prepTime} onValueChange={setPrepTime}>
+            <RadioGroup 
+              name="prepTime" // Added name prop
+              value={prepTime} 
+              onValueChange={setPrepTime}
+            >
               {PREP_TIMES.map((time) => (
                 <div key={time.value} className="flex items-center space-x-2">
                   <RadioGroupItem
@@ -114,7 +128,7 @@ export function InteractiveLessonForm({ lessonType, onChangeType }: Props) {
             </RadioGroup>
           </div>
 
-          {/* Materials (unique) */}
+          {/* Unique Field: Materials */}
           <div className="space-y-1">
             <Label htmlFor="materials" className="text-md font-semibold">
               Materials<span className="ml-0.5 text-red-600">*</span>
@@ -132,7 +146,7 @@ export function InteractiveLessonForm({ lessonType, onChangeType }: Props) {
             />
           </div>
 
-          <LessonPlanField />
+          <LessonPlanField name="lessonPlan" />
           <FormFooterButtons />
         </CardContent>
       </form>
