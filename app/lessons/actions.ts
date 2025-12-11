@@ -146,7 +146,8 @@ export async function getLessonById(lessonId: string | number) {
       description,
       lesson_plan,
       created_at,
-      author:app_user(username, profile_image),
+      author_id,
+      author:app_user(user_id, username, profile_image),
       lesson_topic(topic(topic_name)),
       interactive_lesson(*),
       video_lesson(*),
@@ -161,9 +162,9 @@ export async function getLessonById(lessonId: string | number) {
     return null;
   }
 
-  // Reuse the same helper so lesson_type is calculated consistently
   return transformLessonData(data);
 }
+
 
 export async function getMyLessons(filter: string = "New") {
   const supabase = await createClient();

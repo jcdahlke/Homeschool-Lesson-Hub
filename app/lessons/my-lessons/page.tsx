@@ -42,11 +42,13 @@ export default async function MyLessonsPage(props: MyLessonsPageProps) {
       <SideMenu isLoggedIn={!!user} />
       {/* Pass searchParams to the feed */}
       <UserLessonFeed searchParams={searchParams} />
-      <UserInfoSidebar 
-        user={user} 
-        lessonsCount={lessonsCount} 
-        profileData={appUser} 
-      />
+
+      {appUser && (
+        <UserInfoSidebar
+          profileData={appUser}
+          lessonsCount={lessonsCount}
+        />
+      )}
     </PageRow>
   );
 }
