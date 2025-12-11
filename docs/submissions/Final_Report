@@ -1,0 +1,66 @@
+# Project Report: Interactive Lesson Creator Platform
+
+
+
+## Project Summary
+
+This project is a Next.js-based web application designed to give homsechoolers a one-stop-shop for interactive lesson ideas. It allows anybody to see the lessons others have posted, and it allows autheticated users to add to the community, since it is a community driven site. It also incorporates a vector search feature to allow for easy lookup of lessons you are looking for.
+
+## Demo
+Demo link goes here
+
+## What did you learn in this project?
+
+We learned how difficult it is to divide up work between frontend and backend. We learned the ins and outs of supabase. We learned that we can create a page template in figma, then give AI the image to create the code for the page.
+
+## Does your project integrate with AI in any interesting way?
+
+It does by using vector search. Each lesson will be turned into a vector using OpenAI embeddings, then Supabase sorts by cosine similarity to find the closest lessons, based on the vectorized search bar search.
+
+## How did you use AI to assist in building your project?
+
+AI was utilized as a pair programmer to accelerate development in three key areas:
+
+- Boilerplate Generation: AI generated the repetitive UI components for the forms (Inputs, Labels, Radio Groups) using Tailwind CSS, ensuring a consistent design system.
+
+- Starter Code Creation: AI was used to turn images from figma into webpages.
+
+- Debugging Server Actions: AI helped identify issues with FormData serialization, specifically how standard HTML forms handle arrays (like topics) vs. how Next.js Server Actions receive them.
+
+- Database Logic: AI assisted in writing the complex Supabase queries that handle foreign key relationships and the manual "rollback" logic (deleting the parent lesson if the child record creation fails).
+
+## Why this project is interesting to you
+
+This project is interesting because it everyone learns in different ways, and it is hard to find one place to find interactive lessons. As I have progressed through school I realize the importance of intuitively understanding things more and more, so this website is to help people do that. This website could also contain ideas for me to use in the future when I am helping teach my own kids.
+
+## Key Learnings
+
+1. Supabase: I learned that Supabase is a very good site that is much more than just a database. It covers authtication, storage (we are using the storage for profile pictures), and even extensions that make it easy to use vector search (pgvector).
+
+2. RLS security: I learned more in depth about what RLS is, and understand why it is important
+
+3. Backend and Frontend separation: It is not easy to separate the backend from the frontend. It made it hard to work on one without the other. So in the future it would be good to learn more efficient ways of separating the backend from the frontend to work on them separately.
+
+## Technical Explanations
+
+### Authentication & Authorization
+
+The project uses Supabase Auth for identity management. However, we separate "Auth User" (the login credentials) from "App User" (the application profile). The Server Action performs a crucial step: it resolves the UUID from the session to an internal BigInt ID used for foreign keys. This decoupling allows us to migrate auth providers in the future without breaking database relationships.
+
+### Failover & Data Consistency
+
+Since Supabase's HTTP API doesn't support long-running SQL transactions in the same way a direct connection might, the createLesson action implements an application-level failover strategy.
+
+- Step 1: Create the parent Lesson.
+
+- Step 2: Attempt to create the specific sub-type (e.g., VideoLesson).
+
+- Failover: If Step 2 throws an error, the catch block explicitly triggers a delete operation on the Lesson created in Step 1. This mimics a database rollback, ensuring we don't end up with "ghost" lessons that have no content.
+
+### Performance & Scaling
+
+- Revalidation: We use Next.js revalidatePath, which ensures that users see their new content immediately without a full page reload, leveraging the Next.js Data Cache.
+
+- Optimistic UI: The application is designed to be responsive. By doing the heavy lifting (lookups for Subjects and Topics) on the server, we reduce the JavaScript bundle size sent to the client.
+
+- Indexing: Database lookups for subject_name and topic_name use ilike queries, which implies the need for appropriate GIN or B-Tree indexes on the Supabase side to maintain performance as the dataset grows.
