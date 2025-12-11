@@ -1,5 +1,9 @@
+'use server'
+
 import { createClient } from "@/utils/supabase/server";
 import OpenAI from "openai";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 // Helper function to format the raw database result for the UI
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -271,4 +275,251 @@ export async function getMyLessons(filter: string = "New") {
 
     return { ...lesson, lesson_type: calculatedType };
   });
+}
+
+// ---------------------------------------------------------
+// NEW: Create Lesson (Server Action)
+// ---------------------------------------------------------
+export async function createLesson(prevState: any, incomingFormData?: FormData) {
+  console.log("--- createLesson Action Started ---");
+
+  const supabase = await createClient();
+
+  // Handle case where function is called directly (1 arg) or via useFormState (2 args)
+  const formData = incomingFormData ?? (prevState as FormData);
+  
+  // 1. Authenticate User (Get UUID)
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    console.error("Authentication Failed: No user found.");
+    return { message: "User not authenticated", error: true };
+  }
+  console.log("Auth UUID:", user.id);
+
+  // 1.5 Fetch Public User Profile (Get BigInt ID)
+  const { data: appUser, error: userError } = await supabase
+    .from("app_user")
+    .select("user_id, num_lessons_added")
+    .eq("supabase_id", user.id)
+    .single();
+
+  if (userError || !appUser) {
+    console.error("Error fetching app_user profile:", userError);
+    return { message: "User profile not found", error: true };
+  }
+
+  const authorId = appUser.user_id;
+  console.log("Internal Author ID resolved:", authorId);
+
+  // 2. Extract Common Fields (Matching React Form Names)
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const lessonPlan = formData.get("lessonPlan") as string; // Form: name="lessonPlan"
+  const ageRange = formData.get("ageRange") as string;     // Form: name="ageRange"
+  const lessonType = formData.get("lessonType") as string; // Form: name="lessonType"
+  
+  // Handle Subject: The form sends 'subject' (e.g., "Math")
+  const rawSubject = formData.get("subject") as string;
+  let subjectId = rawSubject?.trim(); 
+  
+  console.log("Raw Subject Input:", subjectId);
+
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+  if (!subjectId) {
+     return { message: "Subject is required", error: true };
+  }
+
+  if (!uuidRegex.test(subjectId)) {
+    console.log(`Looking up subject by name: "${subjectId}"`);
+    
+    // Convert to lowercase to match DB enum/strings if necessary
+    const { data: subjectData, error: lookupError } = await supabase
+      .from("subject")
+      .select("subject_id")
+      .eq("subject_name", subjectId.toLowerCase()) 
+      .maybeSingle();
+
+    if (lookupError) {
+        console.error("DB Error looking up subject:", lookupError);
+    }
+
+    if (subjectData) {
+      subjectId = subjectData.subject_id;
+      console.log("Subject ID resolved to:", subjectId);
+    } else {
+      // Fallback: If not found, perhaps handle specific "Other" logic or return error
+      console.error(`Invalid subject name: "${subjectId}" - Not found in DB.`);
+      return { message: `Invalid subject: ${subjectId}.`, error: true };
+    }
+  }
+
+  // Handle topics parsing
+  // The form appends 'topics' multiple times, so we use getAll
+  let topics: string[] = formData.getAll("topics") as string[];
+  
+  // Fallback: Check if it came as a JSON string (hidden input fallback)
+  if (topics.length === 0) {
+      const topicsJson = formData.get("topics");
+      if (typeof topicsJson === 'string') {
+        try {
+            topics = JSON.parse(topicsJson);
+        } catch {
+            topics = [];
+        }
+      }
+  }
+
+  // 3. Insert into Main 'lesson' Table
+  console.log("Attempting to insert into 'lesson' table...");
+  
+  const { data: lesson, error: lessonError } = await supabase
+    .from("lesson")
+    .insert({
+      title: title,
+      description: description,
+      subject_id: subjectId, 
+      age_range: ageRange,
+      // type: lessonType, // DB doesn't have this column based on snippet, derived from relation
+      author_id: authorId,
+      lesson_plan: lessonPlan,
+    })
+    .select() 
+    .single();
+
+  if (lessonError || !lesson) {
+    console.error("Database Error creating lesson:", lessonError);
+    return { message: "Failed to create base lesson", error: true };
+  }
+
+  console.log("Lesson created successfully. ID:", lesson.lesson_id);
+  const lessonId = lesson.lesson_id;
+
+  // 3.5 Handle Topics Linking
+  if (topics.length > 0) {
+    const finalTopicIds: string[] = [];
+    
+    for (const item of topics) {
+      if (uuidRegex.test(item)) {
+        finalTopicIds.push(item);
+        continue;
+      }
+
+      // Find or Create Topic
+      const { data: existingTopic } = await supabase
+        .from("topic")
+        .select("topic_id")
+        .ilike("topic_name", item) 
+        .maybeSingle();
+
+      if (existingTopic) {
+        finalTopicIds.push(existingTopic.topic_id);
+      } else {
+        const { data: newTopic, error: createTopicError } = await supabase
+          .from("topic")
+          .insert({ topic_name: item })
+          .select("topic_id")
+          .single();
+
+        if (newTopic) {
+          finalTopicIds.push(newTopic.topic_id);
+        } else {
+          console.error(`Failed to create topic "${item}":`, createTopicError);
+        }
+      }
+    }
+
+    if (finalTopicIds.length > 0) {
+      // Use Set to prevent duplicate links
+      const uniqueTopicIds = Array.from(new Set(finalTopicIds));
+      const topicInserts = uniqueTopicIds.map((tId) => ({
+        lesson_id: lessonId,
+        topic_id: tId,
+      }));
+
+      const { error: topicError } = await supabase
+        .from("lesson_topic")
+        .insert(topicInserts);
+
+      if (topicError) {
+        console.error("Error linking topics:", topicError);
+      }
+    }
+  }
+
+  // 4. Insert into Sub-Tables based on Type
+  let subTableError = null;
+
+  try {
+    console.log(`Inserting sub-table details for type: ${lessonType}`);
+    
+    // Check against the simple string values from the form ("analogy", "video", "interactive")
+    if (lessonType === "analogy") {
+      const comparisonObject = formData.get("comparisonObject") as string;
+
+      const { error } = await supabase
+        .from("analogy_lesson")
+        .insert({
+          lesson_id: lessonId,
+          comparison_object: comparisonObject,
+        });
+      subTableError = error;
+
+    } else if (lessonType === "video") {
+      // The form sends "videoTitle" (source instructions). 
+      // Mapping this to "video_url" assuming that is the intended column for the source.
+      const videoTitle = formData.get("videoTitle") as string;
+      
+      const { error } = await supabase
+        .from("video_lesson")
+        .insert({
+          lesson_id: lessonId,
+          video_url: videoTitle, // Storing the source/title in the URL column
+          // duration: null, // Form does not provide duration
+        });
+      subTableError = error;
+
+    } else if (lessonType === "interactive") {
+      // The form sends "prepTime" and "materials"
+      const prepTime = formData.get("prepTime") as string;
+      const materials = formData.get("materials") as string;
+      
+      // Combine into a content string or JSON
+      const content = `Prep Time: ${prepTime}\nMaterials: ${materials}`;
+
+      const { error } = await supabase
+        .from("interactive_lesson")
+        .insert({
+          lesson_id: lessonId,
+          content: content,
+        });
+      subTableError = error;
+    }
+
+  } catch (err) {
+    console.error("Unexpected error in sub-table insertion:", err);
+    subTableError = { message: "Error processing specific lesson details" };
+  }
+
+  // 5. Error Handling for Sub-tables
+  if (subTableError) {
+    console.error(`Error creating ${lessonType} details:`, subTableError);
+    // Cleanup parent if sub-table fails to maintain integrity
+    await supabase.from("lesson").delete().eq("lesson_id", lessonId);
+    return { message: `Failed to save ${lessonType} details`, error: true };
+  }
+
+  // 6. Update User Stats
+  console.log("Updating user stats...");
+  if (appUser) {
+    await supabase
+      .from("app_user")
+      .update({ num_lessons_added: (appUser.num_lessons_added || 0) + 1 })
+      .eq("user_id", authorId);
+  }
+
+  // 7. Success
+  console.log("Redirecting to /lessons...");
+  revalidatePath("/lessons");
+  redirect("/lessons/my-lessons");
 }

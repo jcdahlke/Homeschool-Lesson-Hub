@@ -1,16 +1,18 @@
 "use client";
 
 import * as React from "react";
+import { createLesson } from "@/app/lessons/actions";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { LessonType } from "../lesson-types";
 import { LessonFormHeader } from "./header";
 import {
-  useSubjects,
+  useTopics,
   TitleField,
   DescriptionField,
-  SubjectsField,
+  TopicsField,
+  SubjectField,
   AgeRangeField,
   LessonPlanField,
   FormFooterButtons,
@@ -21,61 +23,62 @@ type Props = {
   onChangeType: (type: LessonType) => void;
 };
 
-type AnalogyLessonPayload = {
-  lessonType: LessonType;
-  title: string;
-  description: string;
-  subjects: string[];
-  ageRange: string;
-  comparisonObject: string;
-  lessonPlan: string;
-};
-
 export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
-  const { subjects, subjectInput, setSubjectInput, addSubject, removeSubject } =
-    useSubjects();
+  // 1. Hooks for shared fields
+  const { topics, topicInput, setTopicInput, addTopic, removeTopic } = useTopics();
+
+  // 2. State for dropdowns/radios
   const [ageRange, setAgeRange] = React.useState("");
+  const [subject, setSubject] = React.useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  // 3. Submit Handler
+  async function handleSubmit(formData: FormData) {
+    // We manually append state that isn't captured by native inputs
+    // (e.g., custom Select components or Arrays)
+    
+    // Add topics (array)
+    topics.forEach((t) => formData.append("topics", t));
 
-    const payload: AnalogyLessonPayload = {
-      lessonType,
-      title: (formData.get("title") as string) ?? "",
-      description: (formData.get("description") as string) ?? "",
-      subjects,
-      ageRange,
-      comparisonObject: (formData.get("comparisonObject") as string) ?? "",
-      lessonPlan: (formData.get("lessonPlan") as string) ?? "",
-    };
+    // Add controlled state
+    formData.append("ageRange", ageRange);
+    formData.append("subject", subject);
+    formData.append("lessonType", lessonType);
 
-    // TODO: send to Supabase / API route
-    console.log("Analogy lesson payload", payload);
+    // Note: 'title', 'description', 'comparisonObject', and 'lessonPlan' 
+    // are captured automatically via their 'name' attributes.
+
+    // Send to Backend
+    await createLesson(formData);
   }
 
   return (
-    <Card className="mx-auto max-w-3xl">
-      <form onSubmit={handleSubmit}>
-        <CardHeader className="pb-3">
+    <Card className="mx-auto max-w-3xl shadow-sm">
+      <form action={handleSubmit}>
+        <CardHeader className="pb-3 border-b">
           <LessonFormHeader value={lessonType} onChange={onChangeType} />
         </CardHeader>
 
-        <CardContent className="space-y-6 pt-2 pb-6">
-          <TitleField />
-          <DescriptionField />
+        <CardContent className="space-y-6 pt-6 pb-6">
+          {/* Explicitly passing names to ensure FormData captures them */}
+          <TitleField name="title" />
+          <DescriptionField name="description" />
 
-          <SubjectsField
-            subjects={subjects}
-            subjectInput={subjectInput}
-            setSubjectInput={setSubjectInput}
-            addSubject={addSubject}
-            removeSubject={removeSubject}
+          {/* Subject is controlled state, appended manually in handleSubmit */}
+          <SubjectField value={subject} onChange={setSubject} />
+
+          {/* Topics are state arrays, appended manually in handleSubmit */}
+          <TopicsField
+            topics={topics}
+            topicInput={topicInput}
+            setTopicInput={setTopicInput}
+            addTopic={addTopic}
+            removeTopic={removeTopic}
           />
 
+          {/* AgeRange is controlled state, appended manually in handleSubmit */}
           <AgeRangeField value={ageRange} onChange={setAgeRange} />
 
-          {/* Comparison object (unique) */}
+          {/* Unique Field: Comparison Object */}
           <div className="space-y-1">
             <Label
               htmlFor="comparisonObject"
@@ -84,18 +87,20 @@ export function AnalogyLessonForm({ lessonType, onChangeType }: Props) {
               Comparison Object<span className="ml-0.5 text-red-600">*</span>
             </Label>
             <p className="text-[11px] text-muted-foreground">
-              Explain the comparison object of your analogy.
+              What familiar object are you comparing the concept to?
             </p>
             <Input
               id="comparisonObject"
-              name="comparisonObject"
+              name="comparisonObject" // Ensures this field is in formData
               required
               className="h-9 rounded-sm text-sm"
-              placeholder="Type comparison object"
+              placeholder="e.g. A factory, a castle, a solar system"
             />
           </div>
 
-          <LessonPlanField />
+          {/* Explicitly passing name for the textarea */}
+          <LessonPlanField name="lessonPlan" />
+          
           <FormFooterButtons />
         </CardContent>
       </form>

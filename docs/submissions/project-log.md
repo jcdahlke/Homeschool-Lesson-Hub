@@ -14,7 +14,8 @@
 11/25/2025 | Changed Genre to Subject, Studied sign-up connection methods to app_user table, implemented API version but then changed to Supabase trigger option on creation of Supabase auth user | 5 Hours |
 12/03/2025 | Meeting with Bethany: Planned project presentation and next steps | 1.0 Hour|
 12/08/2025 | Generated Demo Data for database, added backend to user updates and profile image changers, added RLS for all tables| 5.5 Hours |
-Total: `26` Hours
+12/10/2025 | Finished connecting to database | 7 Hours |
+Total: `33` Hours
 
 ## Bethany Edwards
 
