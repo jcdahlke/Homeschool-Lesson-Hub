@@ -6,6 +6,7 @@ import { AdMenu } from "@/components/layout/ad-sidebar";
 import { Card, CardContent } from "@/components/ui/card";
 import { createClient } from "@/utils/supabase/server";
 import { getLessonById } from "../actions";
+import { Clock, Box } from "lucide-react"; // Import icons for prep time and materials
 
 type LessonPageProps = {
   // Next.js 15: params is a Promise now
@@ -124,7 +125,9 @@ export default async function LessonPage(props: LessonPageProps) {
                 ))}
             </div>
 
-            {/* Type-specific blocks (you can tweak to your schema) */}
+            {/* --- TYPE SPECIFIC SECTIONS --- */}
+
+            {/* 1. ANALOGY */}
             {lesson.lesson_type === "analogy_lesson" &&
               lesson.analogy_lesson?.[0]?.comparison_object && (
                 <div className="rounded-md bg-muted p-3 text-xs">
@@ -137,37 +140,71 @@ export default async function LessonPage(props: LessonPageProps) {
                 </div>
               )}
 
+            {/* 2. VIDEO LESSON */}
             {lesson.lesson_type === "video_lesson" &&
-              lesson.video_lesson?.[0]?.video_url && (
-                <div className="space-y-2">
-                  <p className="font-semibold text-[11px] uppercase tracking-wide text-muted-foreground">
-                    Video
-                  </p>
-                  <a
-                    href={lesson.video_lesson[0].video_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex text-sm font-medium text-brandGreen hover:underline"
-                  >
-                    Watch video lesson
-                  </a>
+              lesson.video_lesson?.[0] && (
+                <div className="rounded-md border p-4 bg-muted/20">
+                  <p className="font-semibold text-sm mb-2">Video Lesson</p>
+                  
+                  {/* Show Video Title */}
+                  {lesson.video_lesson[0].video_title && (
+                    <p className="text-sm text-foreground mb-3 font-medium">
+                      🎥 {lesson.video_lesson[0].video_title}
+                    </p>
+                  )}
+
+                  {/* Watch Link */}
+                  {lesson.video_lesson[0].video_url && (
+                    <a
+                      href={lesson.video_lesson[0].video_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center text-sm font-medium text-brandGreen hover:underline"
+                    >
+                      Watch on YouTube ↗
+                    </a>
+                  )}
                 </div>
               )}
 
+            {/* 3. INTERACTIVE LESSON */}
             {lesson.lesson_type === "interactive_lesson" &&
-              lesson.interactive_lesson?.[0]?.instructions && (
-                <div className="space-y-2">
-                  <p className="font-semibold text-[11px] uppercase tracking-wide text-muted-foreground">
-                    Interactive instructions
-                  </p>
-                  <p className="text-sm whitespace-pre-wrap">
-                    {lesson.interactive_lesson[0].instructions}
-                  </p>
+              lesson.interactive_lesson?.[0] && (
+                <div className="space-y-4 rounded-md border p-4 bg-muted/20">
+                  <div className="flex items-center justify-between">
+                    <p className="font-semibold text-sm">Interactive Activity</p>
+                  </div>
+
+                  {/* Materials & Prep Time */}
+                  <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                    {lesson.interactive_lesson[0].prep_time && (
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="h-4 w-4" />
+                        <span>Prep: {lesson.interactive_lesson[0].prep_time}</span>
+                      </div>
+                    )}
+                    {lesson.interactive_lesson[0].materials && (
+                      <div className="flex items-center gap-1.5">
+                        <Box className="h-4 w-4" />
+                        <span>Materials: {lesson.interactive_lesson[0].materials}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Instructions (Mapped from lesson_plan in actions.ts) */}
+                  {lesson.interactive_lesson[0].instructions && (
+                    <div className="space-y-1">
+                      <p className="text-xs font-semibold uppercase text-muted-foreground">Instructions</p>
+                      <p className="text-sm whitespace-pre-wrap">
+                        {lesson.interactive_lesson[0].instructions}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 
-            {/* Lesson plan */}
-            {lesson.lesson_plan && (
+            {/* FALLBACK: Generic Lesson Plan (if not interactive) */}
+            {lesson.lesson_type !== "interactive_lesson" && lesson.lesson_plan && (
               <div className="space-y-2">
                 <p className="font-semibold text-[11px] uppercase tracking-wide text-muted-foreground">
                   Lesson plan

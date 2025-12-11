@@ -134,35 +134,80 @@ export async function getLessons(filter: string = "New", searchQuery?: string) {
 }
 
 // Fetch a single lesson by ID, including its type-specific tables
-export async function getLessonById(lessonId: string | number) {
+export async function getLessonById(lessonId: string) {
   const supabase = await createClient();
 
+  // 1. Fetch the lesson and ALL its relations
   const { data, error } = await supabase
     .from("lesson")
-    .select(
-      `
-      lesson_id,
-      title,
-      description,
-      lesson_plan,
-      created_at,
+    .select(`
+      *,
       author:app_user(username, profile_image),
       lesson_topic(topic(topic_name)),
+      subject(subject_name),
       interactive_lesson(*),
       video_lesson(*),
       analogy_lesson(*)
-    `
-    )
+    `)
     .eq("lesson_id", lessonId)
-    .single();
+    .single(); // We expect only one result
 
   if (error) {
-    console.error("Error fetching lesson by id:", error);
+    console.error("Error fetching lesson details:", error);
     return null;
   }
 
-  // Reuse the same helper so lesson_type is calculated consistently
-  return transformLessonData(data);
+  // 2. Transform the data for the UI
+  return transformSingleLesson(data);
+}
+
+// Helper to format a single lesson object
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function transformSingleLesson(lesson: any) {
+  let calculatedType = "General";
+
+  // Normalize relations to arrays
+  const interactive = Array.isArray(lesson.interactive_lesson) 
+    ? lesson.interactive_lesson 
+    : (lesson.interactive_lesson ? [lesson.interactive_lesson] : []);
+
+  const video = Array.isArray(lesson.video_lesson) 
+    ? lesson.video_lesson 
+    : (lesson.video_lesson ? [lesson.video_lesson] : []);
+
+  const analogy = Array.isArray(lesson.analogy_lesson) 
+    ? lesson.analogy_lesson 
+    : (lesson.analogy_lesson ? [lesson.analogy_lesson] : []);
+
+  // Determine type based on which array has data
+  if (interactive.length > 0) calculatedType = "interactive_lesson";
+  else if (video.length > 0) calculatedType = "video_lesson";
+  else if (analogy.length > 0) calculatedType = "analogy_lesson";
+
+  // PATCH: Fix Data Mismatches for UI
+  
+  // 1. Interactive: Map 'lesson_plan' to instructions so the UI finds it.
+  //    Also ensures prep_time and materials are passed through (they are already in the object).
+  if (interactive.length > 0) {
+    interactive[0].instructions = lesson.lesson_plan;
+  }
+
+  // 2. Video: Generate a search link if url is missing, but preserve video_title
+  if (video.length > 0 && !video[0].video_url) {
+    video[0].video_url = `https://www.youtube.com/results?search_query=${encodeURIComponent(video[0].video_title || lesson.title)}`;
+  }
+
+  // Create a clean "subjects" array for the UI tags
+  const subjects = lesson.subject?.subject_name ? [lesson.subject.subject_name] : [];
+
+  return {
+    ...lesson,
+    interactive_lesson: interactive,
+    video_lesson: video,
+    analogy_lesson: analogy,
+    lesson_type: calculatedType,
+    subjects: subjects, 
+  };
 }
 
 export async function getMyLessons(filter: string = "New") {
