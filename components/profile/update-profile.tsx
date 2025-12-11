@@ -22,7 +22,11 @@ interface ProfileData {
   profile_image: string | null;
 }
 
-export function UpdateProfile({ initialData }: { initialData: ProfileData | null }) {
+export function UpdateProfile({
+  initialData,
+}: {
+  initialData: ProfileData | null;
+}) {
   const [status, setStatus] = useState<{
     error?: string;
     success?: string;
@@ -40,7 +44,9 @@ export function UpdateProfile({ initialData }: { initialData: ProfileData | null
     <section className="flex-1">
       <Card className="shadow-sm">
         <CardHeader className="border-b">
-          <CardTitle className="text-2xl font-semibold">Update Profile</CardTitle>
+          <CardTitle className="text-2xl font-semibold">
+            Update Profile
+          </CardTitle>
           <CardDescription>
             Manage your profile on Homeschool Lesson Hub.
           </CardDescription>
@@ -49,34 +55,55 @@ export function UpdateProfile({ initialData }: { initialData: ProfileData | null
         {/* Connect the form to the wrapper function */}
         <form action={handleSubmit}>
           <CardContent className="space-y-8 pt-6">
-            
             {/* Profile Image Display */}
             <div className="space-y-3">
               <Label className="text-xs font-semibold uppercase text-muted-foreground">
                 Profile Image
               </Label>
+
               <div className="flex items-center gap-4">
                 {initialData?.profile_image ? (
-                  <img 
-                    src={initialData.profile_image} 
-                    alt="Profile" 
+                  <img
+                    src={initialData.profile_image}
+                    alt="Profile"
                     className="h-16 w-16 rounded-full object-cover bg-muted"
                   />
                 ) : (
                   <div className="h-16 w-16 rounded-full bg-muted" />
                 )}
-                {/* File Input for Upload */}
-                <Input 
-                  id="profileImage" 
-                  name="profileImage" 
-                  type="file" 
-                  accept="image/*"
-                  className="w-full max-w-xs"
-                />
+
+                {/* Custom File Input Button */}
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="profileImage"
+                    className="cursor-pointer rounded-md bg-brandGreen px-4 py-2 text-sm font-medium text-white hover:bg-brandGreenDark"
+                  >
+                    Choose File
+                  </label>
+
+                  {/* Hidden native input */}
+                  <input
+                    id="profileImage"
+                    name="profileImage"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const span = document.getElementById("fileName");
+                      span!.textContent =
+                        e.target.files?.[0]?.name || "No file chosen";
+                    }}
+                  />
+
+                  {/* Browser-controlled filename text */}
+                  <span id="fileName" className="text-sm text-muted-foreground">
+                    No file chosen
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Full Name */}
+            {/* Full Name
             <div className="space-y-2">
               <Label htmlFor="fullName">Full Name</Label>
               <Input
@@ -85,7 +112,7 @@ export function UpdateProfile({ initialData }: { initialData: ProfileData | null
                 placeholder="John Doe"
                 defaultValue={initialData?.full_name || ""} 
               />
-            </div>
+            </div> */}
 
             {/* Username */}
             <div className="space-y-2">
@@ -125,7 +152,7 @@ export function UpdateProfile({ initialData }: { initialData: ProfileData | null
             <div className="flex justify-end">
               <Button
                 type="submit"
-                className="bg-brandGreen text-white hover:bg-brandGreen/90"
+                className="bg-brandGreen text-white hover:bg-brandGreenDark"
               >
                 Save changes
               </Button>
