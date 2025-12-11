@@ -131,6 +131,7 @@ export async function getLessons(filter: string = "New", searchQuery?: string) {
   return data.map(transformLessonData);
 }
 
+
 export async function getLessonById(lessonId: string) {
   const supabase = await createClient();
 
@@ -171,9 +172,6 @@ export async function getLessonById(lessonId: string) {
   return data;
 }
 
-// ---------------------------------------------------------
-// NEW: Get lessons for the CURRENT USER only
-// ---------------------------------------------------------
 export async function getMyLessons(filter: string = "New") {
   const supabase = await createClient();
 
