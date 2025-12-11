@@ -70,7 +70,8 @@ export async function getLessons(filter: string = "New", searchQuery?: string) {
 
     const { data: fullLessons, error: fetchError } = await supabase
       .from("lesson")
-      .select(`
+      .select(
+        `
         lesson_id,
         title,
         description,
@@ -79,7 +80,8 @@ export async function getLessons(filter: string = "New", searchQuery?: string) {
         author:app_user(username, profile_image),
         lesson_topic(topic(topic_name)),
         interactive_lesson(*), video_lesson(*), analogy_lesson(*)
-      `)
+      `
+      )
       .in("lesson_id", lessonIds);
 
     if (fetchError || !fullLessons) return [];
@@ -131,35 +133,25 @@ export async function getLessons(filter: string = "New", searchQuery?: string) {
   return data.map(transformLessonData);
 }
 
-
-export async function getLessonById(lessonId: string) {
+// Fetch a single lesson by ID, including its type-specific tables
+export async function getLessonById(lessonId: string | number) {
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from("lessons")
+    .from("lesson")
     .select(
       `
-        lesson_id,
-        title,
-        description,
-        created_at,
-        lesson_type,
-        lesson_plan,
-        age_range,
-        subjects,
-        analogy_comparison_object,
-        video_url,
-        interactive_instructions,
-        author:profiles (
-          username,
-          profile_image
-        ),
-        lesson_topic:lesson_topics (
-          topic:topics (
-            topic_name
-          )
-        )
-      `
+      lesson_id,
+      title,
+      description,
+      lesson_plan,
+      created_at,
+      author:app_user(username, profile_image),
+      lesson_topic(topic(topic_name)),
+      interactive_lesson(*),
+      video_lesson(*),
+      analogy_lesson(*)
+    `
     )
     .eq("lesson_id", lessonId)
     .single();
@@ -169,14 +161,17 @@ export async function getLessonById(lessonId: string) {
     return null;
   }
 
-  return data;
+  // Reuse the same helper so lesson_type is calculated consistently
+  return transformLessonData(data);
 }
 
 export async function getMyLessons(filter: string = "New") {
   const supabase = await createClient();
 
   // 1. Get current user
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) return [];
 
   // 2. Get their public ID
@@ -203,7 +198,8 @@ export async function getMyLessons(filter: string = "New") {
   if (filter === "Interactive") selectQuery += `, interactive_lesson!inner(*)`;
   else if (filter === "Video") selectQuery += `, video_lesson!inner(*)`;
   else if (filter === "Analogy") selectQuery += `, analogy_lesson!inner(*)`;
-  else selectQuery += `, interactive_lesson(*), video_lesson(*), analogy_lesson(*)`;
+  else
+    selectQuery += `, interactive_lesson(*), video_lesson(*), analogy_lesson(*)`;
 
   // Fetch data
   const { data, error } = await supabase
@@ -220,9 +216,12 @@ export async function getMyLessons(filter: string = "New") {
   // Reuse the transform function (copy it from above if not exported, or duplicate logic)
   return data.map((lesson: any) => {
     let calculatedType = "General";
-    if (lesson.interactive_lesson?.length > 0 || lesson.interactive_lesson) calculatedType = "interactive_lesson";
-    else if (lesson.video_lesson?.length > 0 || lesson.video_lesson) calculatedType = "video_lesson";
-    else if (lesson.analogy_lesson?.length > 0 || lesson.analogy_lesson) calculatedType = "analogy_lesson";
+    if (lesson.interactive_lesson?.length > 0 || lesson.interactive_lesson)
+      calculatedType = "interactive_lesson";
+    else if (lesson.video_lesson?.length > 0 || lesson.video_lesson)
+      calculatedType = "video_lesson";
+    else if (lesson.analogy_lesson?.length > 0 || lesson.analogy_lesson)
+      calculatedType = "analogy_lesson";
 
     return { ...lesson, lesson_type: calculatedType };
   });
