@@ -2,11 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageRow } from "@/components/layout/page-row";
 import { SideMenu } from "@/components/layout/side-menu";
-import { AdMenu } from "@/components/layout/ad-sidebar";
 import { Card, CardContent } from "@/components/ui/card";
 import { createClient } from "@/utils/supabase/server";
 import { getLessonById } from "../actions";
 import { Clock, Box } from "lucide-react"; // Import icons for prep time and materials
+import { UserInfoSidebar } from "@/components/layout/user-info-sidebar";
 
 type LessonPageProps = {
   // Next.js 15: params is a Promise now
@@ -22,7 +22,6 @@ function formatDate(dateString: string) {
 }
 
 export default async function LessonPage(props: LessonPageProps) {
-  // ✅ unwrap the params Promise
   const { lessonId } = await props.params;
 
   if (!lessonId) {
@@ -30,14 +29,28 @@ export default async function LessonPage(props: LessonPageProps) {
   }
 
   const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
-  const user = data?.user;
+  const { data: authData } = await supabase.auth.getUser();
+  const user = authData?.user;
 
-  // lessonId will now be a real string like "27", not undefined
   const lesson = await getLessonById(lessonId);
 
   if (!lesson) {
     notFound();
+  }
+
+  const author = lesson.author;
+  const authorId = author?.user_id ?? lesson.author_id ?? null;
+
+  // Count how many lessons this AUTHOR has posted
+  let authorLessonsCount = 0;
+
+  if (authorId) {
+    const { count } = await supabase
+      .from("lesson")
+      .select("*", { count: "exact", head: true })
+      .eq("author_id", authorId);
+
+    authorLessonsCount = count || 0;
   }
 
   return (
@@ -61,10 +74,8 @@ export default async function LessonPage(props: LessonPageProps) {
             {/* Header: author + meta */}
             <div className="flex items-start gap-3">
               <img
-                src={
-                  lesson.author?.profile_image || "/default-profile-picture.png"
-                }
-                alt={lesson.author?.username || "User"}
+                src={author?.profile_image || "/default-profile-picture.png"}
+                alt={author?.username || "User"}
                 className="h-10 w-10 flex-shrink-0 rounded-full object-cover bg-muted border"
               />
 
@@ -72,7 +83,7 @@ export default async function LessonPage(props: LessonPageProps) {
                 <div className="flex items-start justify-between gap-4">
                   <div className="text-xs text-muted-foreground">
                     <div className="font-medium text-sm text-foreground">
-                      @{lesson.author?.username || "Unknown Author"}
+                      @{author?.username || "Unknown Author"}
                     </div>
                     <div>{formatDate(lesson.created_at)}</div>
                   </div>
@@ -220,7 +231,17 @@ export default async function LessonPage(props: LessonPageProps) {
         </Card>
       </main>
 
-      <AdMenu />
+      {/* Sidebar: always show for the lesson author */}
+      <UserInfoSidebar
+        profileData={{
+          // if your UserInfoSidebar type has user_id optional, this is fine;
+          // otherwise, authorId is now a proper string from the query above
+          user_id: authorId || "",
+          username: author?.username ?? null,
+          profile_image: author?.profile_image ?? null,
+        }}
+        lessonsCount={authorLessonsCount}
+      />
     </PageRow>
   );
 }

@@ -1,43 +1,32 @@
 import { BookOpen } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
-import type { User } from "@supabase/supabase-js";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 
-type UserInfoSidebarProps = {
-  user: User;
-  lessonsCount: number;
-  // New prop to accept the database profile data
-  profileData?: {
-    username: string | null;
-    profile_image: string | null;
-  } | null;
+type UserProfileData = {
+  user_id: string;
+  username: string | null;
+  profile_image: string | null;
 };
 
-export function UserInfoSidebar({
-  user,
-  lessonsCount,
-  profileData,
-}: UserInfoSidebarProps) {
-  // 1. Determine Username: Prefer DB > Auth Metadata > Email > Default
-  const dbUsername = profileData?.username;
-  const authUsername =
-    (user.user_metadata as any)?.username ||
-    user.email?.split("@")[0] ||
-    "user";
+type UserInfoSidebarProps = {
+  profileData: UserProfileData;
+  lessonsCount: number;
+};
 
-  // Use the database username if available, otherwise fall back
-  const rawUsername = (dbUsername || authUsername) ?? "user";
+export function UserInfoSidebar({ profileData, lessonsCount }: UserInfoSidebarProps) {
+  // Username: from profileData, or default
+  const rawUsername = profileData.username ?? "user";
 
   // Ensure we don't end up with @@something if the user added one manually
   const username = rawUsername.replace(/^@/, "");
 
-  // 2. Determine Avatar: Prefer DB > Auth Metadata > Default
-  const dbAvatar = profileData?.profile_image;
-  const authAvatar = (user.user_metadata as any)?.avatar_url;
+  // Avatar: from profileData or branded placeholder
+  const avatarUrl = profileData.profile_image || "/images/pfp-default.png";
 
-  // Use DB image first, then auth image, then branded placeholder
-  const avatarUrl =
-    dbAvatar || authAvatar || "/images/pfp-bjgraves.png";
+  const fallbackInitial =
+    username && username.length > 0
+      ? username[0]!.toUpperCase()
+      : "U";
 
   return (
     <aside className="hidden w-72 shrink-0 xl:block">
@@ -46,7 +35,7 @@ export function UserInfoSidebar({
           {/* Avatar */}
           <Avatar className="h-32 w-32">
             <AvatarImage src={avatarUrl} alt={username} />
-            <AvatarFallback>{username[0]?.toUpperCase()}</AvatarFallback>
+            <AvatarFallback>{fallbackInitial}</AvatarFallback>
           </Avatar>
 
           {/* Username only */}

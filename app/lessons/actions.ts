@@ -210,6 +210,7 @@ function transformSingleLesson(lesson: any) {
   };
 }
 
+
 export async function getMyLessons(filter: string = "New") {
   const supabase = await createClient();
 
