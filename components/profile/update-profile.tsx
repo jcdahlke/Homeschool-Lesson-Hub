@@ -76,7 +76,7 @@ export function UpdateProfile({ initialData }: { initialData: ProfileData | null
               </div>
             </div>
 
-            {/* Full Name */}
+            {/* Full Name
             <div className="space-y-2">
               <Label htmlFor="fullName">Full Name</Label>
               <Input
@@ -85,7 +85,7 @@ export function UpdateProfile({ initialData }: { initialData: ProfileData | null
                 placeholder="John Doe"
                 defaultValue={initialData?.full_name || ""} 
               />
-            </div>
+            </div> */}
 
             {/* Username */}
             <div className="space-y-2">
