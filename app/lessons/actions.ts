@@ -131,6 +131,46 @@ export async function getLessons(filter: string = "New", searchQuery?: string) {
   return data.map(transformLessonData);
 }
 
+export async function getLessonById(lessonId: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("lessons")
+    .select(
+      `
+        lesson_id,
+        title,
+        description,
+        created_at,
+        lesson_type,
+        lesson_plan,
+        age_range,
+        subjects,
+        analogy_comparison_object,
+        video_url,
+        interactive_instructions,
+        author:profiles (
+          username,
+          profile_image
+        ),
+        lesson_topic:lesson_topics (
+          topic:topics (
+            topic_name
+          )
+        )
+      `
+    )
+    .eq("lesson_id", lessonId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching lesson by id:", error);
+    return null;
+  }
+
+  return data;
+}
+
 // ---------------------------------------------------------
 // NEW: Get lessons for the CURRENT USER only
 // ---------------------------------------------------------
