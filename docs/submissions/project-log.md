@@ -31,7 +31,6 @@ Total: `33` Hours
 | 12/03/2025 | Meeting with Joey: Planned project presentation and next steps | 1.0 |
 | 12/04/2025 | Figma: Design User profile page | 2.0 |
 | 12/06/2025 | React stubs: profile page, lessons feed, my-lessons, create lesson | 5.5 |
-| 12/10/2025 | React stubs: lesson types, Supabase: add my first db query! hehe | 5.5 |
-<!-- 8.20 -->
+| 12/10/2025 | React stubs: lesson types, React implementations and finalizations and bug fixes, Supabase: wire default pfp for new accounts, Middleware: redirect on un/protected pages, Final: record demo vid  | 6.5 |
 
-Total: `31.0` Hours
+Total: `32.0` Hours
