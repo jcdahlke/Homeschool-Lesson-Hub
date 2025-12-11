@@ -288,7 +288,8 @@ export function FormFooterButtons() {
         size="md"
         className="px-8 bg-brandGreen hover:bg-brandGreenDark flex items-center gap-2"
       >
-        Publish
+        Create Lesson
+        {/* Publish */}
       </Button>
     </div>
   );

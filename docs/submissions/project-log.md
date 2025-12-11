@@ -32,6 +32,6 @@ Total: `33` Hours
 | 12/04/2025 | Figma: Design User profile page | 2.0 |
 | 12/06/2025 | React stubs: profile page, lessons feed, my-lessons, create lesson | 5.5 |
 | 12/10/2025 | React stubs: lesson types, Supabase: add my first db query! hehe | 5.5 |
-<!-- | Date | Description | | -->
+<!-- 8.20 -->
 
 Total: `31.0` Hours

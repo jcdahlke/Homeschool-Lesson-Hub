@@ -5,7 +5,7 @@ import { SideMenu } from "@/components/layout/side-menu";
 import { Card, CardContent } from "@/components/ui/card";
 import { createClient } from "@/utils/supabase/server";
 import { getLessonById } from "../actions";
-import { Clock, Box } from "lucide-react"; // Import icons for prep time and materials
+import { Clock, Box } from "lucide-react"; 
 import { UserInfoSidebar } from "@/components/layout/user-info-sidebar";
 
 type LessonPageProps = {
