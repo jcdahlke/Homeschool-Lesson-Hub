@@ -30,8 +30,7 @@ Total: `26` Hours
 | 12/03/2025 | Meeting with Joey: Planned project presentation and next steps | 1.0 |
 | 12/04/2025 | Figma: Design User profile page | 2.0 |
 | 12/06/2025 | React stubs: profile page, lessons feed, my-lessons, create lesson | 5.5 |
-| 12/10/2025 | React stubs: lesson types | 3.0 |
-4-6?
+| 12/10/2025 | React stubs: lesson types | 4.0 |
 <!-- | Date | Description | | -->
 
-Total: `28.5` Hours
+Total: `29.5` Hours
